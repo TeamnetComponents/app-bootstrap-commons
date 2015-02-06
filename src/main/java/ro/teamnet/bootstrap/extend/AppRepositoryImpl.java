@@ -48,21 +48,19 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
             return page;
 
         return new PageResource<T>(new AppPageImpl<T>(page != null ? page.getContent() : null,
-            pageable, page != null ? page.getTotalElements() : 0,
-            pageable.getFilters()));
-
-
+                pageable, page != null ? page.getTotalElements() : 0,
+                pageable.getFilters()));
     }
 
     @Override
     public AppPage<T> findAll(AppPageable appPageable) {
         List<Filter> filters = appPageable.getFilters() == null
-            ? new ArrayList<Filter>()
-            : appPageable.getFilters();
+                ? new ArrayList<Filter>()
+                : appPageable.getFilters();
 
         Page<T> page = filters.isEmpty()
-            ? super.findAll(appPageable)
-            : super.findAll(createSpecification(appPageable), appPageable);
+                ? super.findAll(appPageable)
+                : super.findAll(createSpecification(appPageable), appPageable);
 
         List<T> content = new ArrayList<>();
         for (T item : page) {
@@ -77,16 +75,38 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate ret = null;
-                for (Filter filter : pageable.getFilters()) {
-                    ret = cb.and(root.get(filter.getProperty()).in(convertStringToObject(root.get(filter.getProperty()).type(), filter)));
-                }
-                return ret;
-            }
 
+                Predicate predicate = null;
+                StringBuilder pattern =  new StringBuilder();
+                pattern.append("%");
+                String filterPattern;
+
+                for (Filter filter : pageable.getFilters()) {
+
+                    //for testing: filter.setType(Filter.FilterType.EQUAL/IN/LIKE);
+                    //filter.setType(Filter.FilterType.LIKE);
+
+                    switch (filter.getType()) {
+                        case EQUAL:
+                            predicate = cb.equal(root.get(filter.getProperty()), filter.getValue());
+                            break;
+                        case IN:
+                            predicate = root.get(filter.getProperty()).in(convertStringToObject(root.get(filter.getProperty()).type(), filter));
+                            break;
+                        case LIKE:
+                            pattern.append(filter.getValue());
+                            pattern.append("%");
+                            // like() method is case-sensitive. Used toUpperCase() method for case - insensitive search.
+                            filterPattern = (pattern.toString()).toUpperCase();
+                            predicate = cb.like(cb.upper(root.<String>get(filter.getProperty())),filterPattern);
+                            break;
+                    }
+                }
+
+                return predicate;
+            }
             private Collection<?> convertStringToObject(Expression<Class<?>> type, Filter filter) {
                 Collection<Object> ret = new ArrayList<>();
-
                 ret.add(filter.getValue());
                 return ret;
             }
