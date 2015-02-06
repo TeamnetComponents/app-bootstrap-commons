@@ -63,7 +63,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param value valoarea dupa care se filtreaza proprietatea respectiva
      */
@@ -73,7 +73,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param value valoarea dupa care se filtreaza proprietatea respectiva
      * @param type tipul filtrului
@@ -85,7 +85,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param values valorile dupa care se filtreaza proprietatea respectiva
      * @param type tipul filtrului
@@ -97,7 +97,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param values valorile dupa care se filtreaza proprietatea respectiva
      */
@@ -107,7 +107,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param value valoarea dupa care se filtreaza proprietatea respectiva
      * @param type tipul filtrului
@@ -121,7 +121,7 @@ public final class Filter implements Serializable {
     }
 
     /**
-     * Constructor al {@link ro.mediu.tn.bo.fluxuri.extend.Filter}
+     * Constructor al {@link Filter}
      * @param property numele proprietatii
      * @param values valorile dupa care se filtreaza proprietatea respectiva
      * @param type tipul filtrului
@@ -159,9 +159,7 @@ public final class Filter implements Serializable {
     }
 
     public Filter() {
-        throw new RuntimeException("Possible violation code!!!");
     }
-
     public String getProperty() {
         return property;
     }
