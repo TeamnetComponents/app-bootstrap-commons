@@ -7,16 +7,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import ro.teamnet.bootstrap.exception.InvalidNumberOfFiltersException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @NoRepositoryBean
 public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements AppRepository<T, ID> {
+
     @SuppressWarnings("UnusedDeclaration")
     private EntityManager entityManager;
 
@@ -70,48 +71,70 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
         return new AppPageImpl<T>(content, appPageable, page.getTotalElements(), filters);
     }
 
-    private Specification<T> createSpecification(final AppPageable pageable) {
+    public Specification<T> createSpecification(final AppPageable pageable) {
 
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                Predicate predicate = null;
-                StringBuilder pattern =  new StringBuilder();
-                pattern.append("%");
+                List<Predicate> predicates= new ArrayList<>();
                 String filterPattern;
+                PredicateUtil predicateUtil = new PredicateUtil(cb,root);
+                Predicate predicate = null;
 
                 for (Filter filter : pageable.getFilters()) {
-
-                    //for testing: filter.setType(Filter.FilterType.EQUAL/IN/LIKE);
-                    //filter.setType(Filter.FilterType.LIKE);
-
                     switch (filter.getType()) {
                         case EQUAL:
-                            predicate = cb.equal(root.get(filter.getProperty()), filter.getValue());
+                            predicate = predicateUtil.getEqualPredicate(filter.getProperty(),filter.getValue());
                             break;
                         case IN:
-                            predicate = root.get(filter.getProperty()).in(convertStringToObject(root.get(filter.getProperty()).type(), filter));
+                            predicate = predicateUtil.getInPredicate(filter.getProperty(),filter.getValues());
                             break;
                         case LIKE:
-                            pattern.append(filter.getValue());
-                            pattern.append("%");
+                        case STARTS_WITH:
+                        case ENDS_WITH:
                             // like() method is case-sensitive. Used toUpperCase() method for case - insensitive search.
-                            filterPattern = (pattern.toString()).toUpperCase();
-                            predicate = cb.like(cb.upper(root.<String>get(filter.getProperty())),filterPattern);
+                            filterPattern = (Filter.filterPatternBuilder(filter.getValue(),filter.getType())).toUpperCase();
+                            predicate = predicateUtil.getLikePredicate(filter.getProperty(),filterPattern);
+                            break;
+                        case LESS_THAN:
+                            predicate = predicateUtil.getLessThanPredicate(filter.getProperty(),filter.getValue());
+                            break;
+                        case LESS_THAN_OR_EQUAL:
+                            predicate = predicateUtil.getLessThanOrEqualPredicate(filter.getProperty(),filter.getValue());
+                            break;
+                        case GREATER_THAN:
+                            predicate = predicateUtil.getGreaterThanPredicate(filter.getProperty(),filter.getValue());
+                            break;
+                        case GREATER_THAN_OR_EQUAL:
+                            predicate = predicateUtil.getGreaterThanOrEqualPredicate(filter.getProperty(),filter.getValue());
+
+                            break;
+                        case BETWEEN:
+                            try {
+                                predicate = predicateUtil.getBetweenPredicate(filter.getProperty(),filter.getValues());
+                            }catch(InvalidNumberOfFiltersException e){
+                                // tratare exceptie
+                            }
                             break;
                     }
+                    if(filter.getNegation()){
+                        predicates.add(predicateUtil.applyNot(predicate));
+                    }else{
+                        predicates.add(predicate);
+                    }
                 }
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
 
-                return predicate;
-            }
-            private Collection<?> convertStringToObject(Expression<Class<?>> type, Filter filter) {
-                Collection<Object> ret = new ArrayList<>();
-                ret.add(filter.getValue());
-                return ret;
-            }
+
         };
     }
+
+
+
+
+
 
 
 }

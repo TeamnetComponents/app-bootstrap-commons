@@ -29,6 +29,11 @@ public final class Filter implements Serializable {
      */
     String prefix;
 
+    /**
+     * Proprietate dupa care se efectueaza negarea operatorului
+     */
+    private Boolean negation = Boolean.FALSE;
+
 
     /**
      * Tipurile de filtre disponibile.
@@ -36,7 +41,14 @@ public final class Filter implements Serializable {
     public static enum FilterType {
         EQUAL("="),
         LIKE("like"),
-        IN("in")
+        IN("in"),
+        STARTS_WITH("startsWith"),
+        ENDS_WITH("endsWith"),
+        LESS_THAN("lessThan"),
+        LESS_THAN_OR_EQUAL("lessThanOrEqual"),
+        GREATER_THAN("greaterThan"),
+        GREATER_THAN_OR_EQUAL("greaterThanOrEqual"),
+        BETWEEN("between")
         ;
         private String opp;
 
@@ -137,6 +149,9 @@ public final class Filter implements Serializable {
     public List<String> getValues() {
         return values;
     }
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
 
     public void setProperty(String property) {
         this.property = property;
@@ -168,6 +183,13 @@ public final class Filter implements Serializable {
         return value;
     }
 
+    public Boolean getNegation() {
+        return negation;
+    }
+
+    public void setNegation(Boolean negation) {
+        this.negation = negation;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -193,5 +215,42 @@ public final class Filter implements Serializable {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (prefix != null ? prefix.hashCode() : 0);
         return result;
+    }
+
+    /**
+     * Generates a pattern  for filtering
+     * @param filter filter
+     * @param filterType filter type
+     * @return filter pattern
+     */
+    public static String filterPatternBuilder(String filter,Filter.FilterType filterType){
+        String filterPattern;
+        StringBuilder pattern = new StringBuilder();
+        switch(filterType){
+            // pattern: %filter%
+            case LIKE:
+                pattern.append("%");
+                pattern.append(filter);
+                pattern.append("%");
+                filterPattern = pattern.toString();
+                break;
+            // pattern: filter%
+            case STARTS_WITH:
+                pattern.append(filter);
+                pattern.append("%");
+                filterPattern =  pattern.toString();
+                break;
+            // pattern %filter
+            case ENDS_WITH:
+                pattern.append("%");
+                pattern.append(filter);
+                filterPattern = pattern.toString();
+                break;
+            // pattern: filter
+            default:
+                filterPattern = filter;
+                break;
+        }
+        return filterPattern;
     }
 }
