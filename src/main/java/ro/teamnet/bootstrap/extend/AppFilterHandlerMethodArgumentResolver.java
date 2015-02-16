@@ -43,8 +43,7 @@ public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgu
                 if (filter.getType() == null) {
                     if (filter.getValue() != null) {
                         filter.setType(Filter.FilterType.EQUAL);
-                    }
-                    else if (filter.getValues() != null) {
+                    } else if (filter.getValues() != null) {
                         filter.setType(Filter.FilterType.IN);
                     }
                 }

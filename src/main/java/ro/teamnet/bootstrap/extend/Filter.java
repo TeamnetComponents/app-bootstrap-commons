@@ -15,11 +15,11 @@ public final class Filter implements Serializable {
     /**
      * Valoarea dupa care se filtreaza
      */
-    private  String value;
+    private String value;
     /**
      * Valorile dupa care se filtreaza
      */
-    private  List<String> values;
+    private List<String> values;
     /**
      * Tipul filtrului
      */
@@ -30,10 +30,14 @@ public final class Filter implements Serializable {
     String prefix;
 
     /**
-     * Proprietate dupa care se efectueaza negarea operatorului
+     * Flag ce semnaleaza ca filtrarea este o negatie.
      */
     private Boolean negation = Boolean.FALSE;
 
+    /**
+     * Flag ce semnaleaza ca filtrarea este case sensitive.
+     */
+    private Boolean caseSensitive = Boolean.FALSE;
 
     /**
      * Tipurile de filtre disponibile.
@@ -48,8 +52,7 @@ public final class Filter implements Serializable {
         LESS_THAN_OR_EQUAL("lessThanOrEqual"),
         GREATER_THAN("greaterThan"),
         GREATER_THAN_OR_EQUAL("greaterThanOrEqual"),
-        BETWEEN("between")
-        ;
+        BETWEEN("between");
         private String opp;
 
         FilterType(String opp) {
@@ -76,8 +79,9 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param value valoarea dupa care se filtreaza proprietatea respectiva
+     * @param value    valoarea dupa care se filtreaza proprietatea respectiva
      */
     public Filter(String property, String value) {
         this.property = property;
@@ -86,9 +90,10 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param value valoarea dupa care se filtreaza proprietatea respectiva
-     * @param type tipul filtrului
+     * @param value    valoarea dupa care se filtreaza proprietatea respectiva
+     * @param type     tipul filtrului
      */
     public Filter(String property, String value, FilterType type) {
         this.property = property;
@@ -98,9 +103,10 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param values valorile dupa care se filtreaza proprietatea respectiva
-     * @param type tipul filtrului
+     * @param values   valorile dupa care se filtreaza proprietatea respectiva
+     * @param type     tipul filtrului
      */
     public Filter(String property, List<String> values, FilterType type) {
         this.property = property;
@@ -110,8 +116,9 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param values valorile dupa care se filtreaza proprietatea respectiva
+     * @param values   valorile dupa care se filtreaza proprietatea respectiva
      */
     public Filter(String property, List<String> values) {
         this.property = property;
@@ -120,10 +127,11 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param value valoarea dupa care se filtreaza proprietatea respectiva
-     * @param type tipul filtrului
-     * @param prefix prefix al numelui proprietatii
+     * @param value    valoarea dupa care se filtreaza proprietatea respectiva
+     * @param type     tipul filtrului
+     * @param prefix   prefix al numelui proprietatii
      */
     public Filter(String property, String value, FilterType type, String prefix) {
         this.property = property;
@@ -134,10 +142,11 @@ public final class Filter implements Serializable {
 
     /**
      * Constructor al {@link Filter}
+     *
      * @param property numele proprietatii
-     * @param values valorile dupa care se filtreaza proprietatea respectiva
-     * @param type tipul filtrului
-     * @param prefix prefix al numelui proprietatii
+     * @param values   valorile dupa care se filtreaza proprietatea respectiva
+     * @param type     tipul filtrului
+     * @param prefix   prefix al numelui proprietatii
      */
     public Filter(String property, List<String> values, FilterType type, String prefix) {
         this.property = property;
@@ -149,6 +158,7 @@ public final class Filter implements Serializable {
     public List<String> getValues() {
         return values;
     }
+
     public void setValues(List<String> values) {
         this.values = values;
     }
@@ -175,6 +185,7 @@ public final class Filter implements Serializable {
 
     public Filter() {
     }
+
     public String getProperty() {
         return property;
     }
@@ -189,6 +200,14 @@ public final class Filter implements Serializable {
 
     public void setNegation(Boolean negation) {
         this.negation = negation;
+    }
+
+    public Boolean getCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public void setCaseSensitive(Boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
     }
 
     @Override
@@ -219,14 +238,15 @@ public final class Filter implements Serializable {
 
     /**
      * Generates a pattern  for filtering
-     * @param filter filter
+     *
+     * @param filter     filter
      * @param filterType filter type
      * @return filter pattern
      */
-    public static String filterPatternBuilder(String filter,Filter.FilterType filterType){
+    public static String filterPatternBuilder(String filter, Filter.FilterType filterType) {
         String filterPattern;
         StringBuilder pattern = new StringBuilder();
-        switch(filterType){
+        switch (filterType) {
             // pattern: %filter%
             case LIKE:
                 pattern.append("%");
@@ -238,7 +258,7 @@ public final class Filter implements Serializable {
             case STARTS_WITH:
                 pattern.append(filter);
                 pattern.append("%");
-                filterPattern =  pattern.toString();
+                filterPattern = pattern.toString();
                 break;
             // pattern %filter
             case ENDS_WITH:
