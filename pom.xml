@@ -6,14 +6,14 @@
     <parent>
         <groupId>ro.teamnet.bootstrap</groupId>
         <artifactId>bootstrap-dependencies</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>ro.teamnet.bootstrap</groupId>
     <name>app-bootstrap-commons</name>
     <artifactId>app-bootstrap-commons</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
 
     <build>
         <plugins>
