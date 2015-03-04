@@ -8,12 +8,14 @@ package ro.teamnet.bootstrap.extend;
 public @interface ToJson {
     /**
      * Proprietatile ce vor fi excluse de la serializare
+     *
      * @return un vector cu proprietatile ce sunt excluse
      */
     String[] excludeFields() default {"*.class"};
 
     /**
      * Proprietatile ce vor fi incluse la serializare
+     *
      * @return un vector cu prorietatile ce sunt incluse
      */
     String[] includeFields() default {};

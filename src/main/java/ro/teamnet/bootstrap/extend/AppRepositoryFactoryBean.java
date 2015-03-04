@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 import java.io.Serializable;
 
 
-public class AppRepositoryFactoryBean <R extends JpaRepository<T, I>, T, I
-        extends Serializable>extends JpaRepositoryFactoryBean<R, T, I> {
+public class AppRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I
+        extends Serializable> extends JpaRepositoryFactoryBean<R, T, I> {
     protected RepositoryFactorySupport createRepositoryFactory(EntityManager entityManager) {
 
         return new AppRepositoryFactory(entityManager);

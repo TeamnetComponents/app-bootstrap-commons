@@ -27,14 +27,14 @@ public abstract class BaseController {
     private AppPageableHandlerMethodArgumentResolver appPageableHandlerMethodArgumentResolver;
 
     @PostConstruct
-    public void prioritizeCustomArgumentMethodHandlers () {
+    public void prioritizeCustomArgumentMethodHandlers() {
         List<HandlerMethodArgumentResolver> argumentResolvers =
-                new ArrayList<>(adapter.getArgumentResolvers ());
+                new ArrayList<>(adapter.getArgumentResolvers());
         List<HandlerMethodArgumentResolver> customResolvers =
-                adapter.getCustomArgumentResolvers ();
+                adapter.getCustomArgumentResolvers();
         customResolvers.add(0, appPageableHandlerMethodArgumentResolver);
-        argumentResolvers.removeAll (customResolvers);
-        argumentResolvers.addAll (0, customResolvers);
-        adapter.setArgumentResolvers (argumentResolvers);
+        argumentResolvers.removeAll(customResolvers);
+        argumentResolvers.addAll(0, customResolvers);
+        adapter.setArgumentResolvers(argumentResolvers);
     }
 }

@@ -21,7 +21,6 @@ public class AppMultipartHttpServletRequest extends StandardMultipartHttpServlet
     private static final String FILENAME_KEY = "filename=";
 
 
-
     private String extractFilename(String contentDisposition) {
         if (contentDisposition == null) {
             return null;
@@ -37,8 +36,7 @@ public class AppMultipartHttpServletRequest extends StandardMultipartHttpServlet
             if (endIndex != -1) {
                 return filename.substring(1, endIndex);
             }
-        }
-        else {
+        } else {
             int endIndex = filename.indexOf(";");
             if (endIndex != -1) {
                 return filename.substring(0, endIndex);
@@ -61,18 +59,17 @@ public class AppMultipartHttpServletRequest extends StandardMultipartHttpServlet
             MultiValueMap<String, MultipartFile> files = new LinkedMultiValueMap<>(parts.size());
             for (Part part : parts) {
                 String filename = extractFilename(part.getHeader(CONTENT_DISPOSITION));
-                String fileId=part.getHeader(FILE_ID);
-                String fileDescription=request.getParameter("description");
-                if(fileId==null){
-                    fileId=request.getParameter(FILE_ID);
+                String fileId = part.getHeader(FILE_ID);
+                String fileDescription = request.getParameter("description");
+                if (fileId == null) {
+                    fileId = request.getParameter(FILE_ID);
                 }
                 if (filename != null) {
-                    files.add(part.getName(), new AppMultipartFile(part, filename,fileId,fileDescription));
+                    files.add(part.getName(), new AppMultipartFile(part, filename, fileId, fileDescription));
                 }
             }
             setMultipartFiles(files);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new MultipartException("Could not parse multipart servlet request", ex);
         }
     }

@@ -20,15 +20,15 @@ public class AppSortHandlerMethodArgumentResolver extends SortHandlerMethodArgum
 
     public Sort resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                 NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        List<Sort.Order> orderList=new ArrayList<>();
-        String sortStr=webRequest.getParameter(getSortParameter(parameter));
-        if(sortStr==null)
+        List<Sort.Order> orderList = new ArrayList<>();
+        String sortStr = webRequest.getParameter(getSortParameter(parameter));
+        if (sortStr == null)
             return null;
-        Map<String,String>stringMap= new JSONDeserializer<Map<String,String>>().deserialize(sortStr,Map.class);
+        Map<String, String> stringMap = new JSONDeserializer<Map<String, String>>().deserialize(sortStr, Map.class);
         for (String s : stringMap.keySet()) {
-            orderList.add(new Sort.Order(stringMap.get(s).equalsIgnoreCase("ASC")? Sort.Direction.ASC : Sort.Direction.DESC, s));
+            orderList.add(new Sort.Order(stringMap.get(s).equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, s));
         }
-        return orderList.isEmpty()?null:new Sort(orderList);
+        return orderList.isEmpty() ? null : new Sort(orderList);
     }
 
 }

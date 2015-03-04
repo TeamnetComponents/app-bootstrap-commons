@@ -40,9 +40,6 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
     private ClassLoader classLoader = org.springframework.util.ClassUtils.getDefaultClassLoader();
 
 
-
-
-
     /**
      * Creates a new {@link org.springframework.data.jpa.repository.support.JpaRepositoryFactory}.
      *
@@ -53,11 +50,10 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
     public AppRepositoryFactory(EntityManager entityManager) {
 
         super(entityManager);
-        this.entityManager=entityManager;
+        this.entityManager = entityManager;
 
 
     }
-
 
 
     public void setQueryLookupStrategyKey(QueryLookupStrategy.Key key) {
@@ -96,7 +92,7 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
         }
     }
 
-   public RepositoryMetadata getRepositoryMetadata(Class<?> repositoryInterface) {
+    public RepositoryMetadata getRepositoryMetadata(Class<?> repositoryInterface) {
         return Repository.class.isAssignableFrom(repositoryInterface) ? new DefaultRepositoryMetadata(repositoryInterface)
                 : new AnnotationRepositoryMetadata(repositoryInterface);
     }
@@ -114,12 +110,11 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
     }
 
 
-
     public void addRepositoryProxyPostProcessor(RepositoryProxyPostProcessor processor) {
 
         Assert.notNull(processor);
-        if( this.postProcessors==null)
-            this.postProcessors=new ArrayList<>();
+        if (this.postProcessors == null)
+            this.postProcessors = new ArrayList<>();
         this.postProcessors.add(processor);
     }
 
@@ -163,7 +158,7 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
             }
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         private void invokeListeners(RepositoryQuery query) {
 
             for (QueryCreationListener listener : queryPostProcessors) {
@@ -199,7 +194,7 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
             }
 
             if (hasQueryFor(method)) {
-                if(method.isAnnotationPresent(ToJson.class)){
+                if (method.isAnnotationPresent(ToJson.class)) {
                    /* Object t=queries.get(method).execute(invocation.getArguments());
 
                     ToJson toJson=method.getAnnotation(ToJson.class);
@@ -222,11 +217,9 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
                     }
 
                     return t;*/
-                }else{
-                    return queries.get(method).execute(invocation.getArguments()) ;
+                } else {
+                    return queries.get(method).execute(invocation.getArguments());
                 }
-
-
 
 
             }
@@ -236,8 +229,6 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
             Method actualMethod = repositoryInformation.getTargetClassMethod(method);
             return executeMethodOn(target, actualMethod, invocation.getArguments());
         }
-
-
 
 
         private Object executeMethodOn(Object target, Method method, Object[] parameters) throws Throwable {
@@ -265,7 +256,7 @@ public class AppRepositoryFactory<T, I extends Serializable> extends JpaReposito
         // Create proxy
         ProxyFactory result = new ProxyFactory();
         result.setTarget(target);
-        result.setInterfaces(new Class[] { repositoryInterface, Repository.class });
+        result.setInterfaces(new Class[]{repositoryInterface, Repository.class});
 
         for (RepositoryProxyPostProcessor processor : postProcessors) {
             processor.postProcess(result, information);

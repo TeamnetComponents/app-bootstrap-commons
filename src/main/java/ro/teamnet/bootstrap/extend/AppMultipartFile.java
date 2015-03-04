@@ -18,10 +18,10 @@ public class AppMultipartFile implements MultipartFile {
 
     private String description;
 
-    public AppMultipartFile(Part part, String filename,String id) {
+    public AppMultipartFile(Part part, String filename, String id) {
         this.part = part;
         this.filename = filename;
-        this.id=id;
+        this.id = id;
     }
 
     public AppMultipartFile(Part part, String filename, String id, String description) {

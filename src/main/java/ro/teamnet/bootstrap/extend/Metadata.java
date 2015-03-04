@@ -35,6 +35,7 @@ public final class Metadata implements Serializable {
 
     /**
      * Constructor al {@link ro.teamnet.bootstrap.extend.Metadata}
+     *
      * @param field campul caruia se ataseaza metadatele
      */
     public Metadata(String field) {
@@ -50,7 +51,8 @@ public final class Metadata implements Serializable {
 
     /**
      * Constructor al {@link ro.teamnet.bootstrap.extend.Metadata}
-     * @param field campul caruia se ataseaza metadatele
+     *
+     * @param field     campul caruia se ataseaza metadatele
      * @param fieldType tipul campului
      */
     public Metadata(String field, String fieldType) {
@@ -61,8 +63,9 @@ public final class Metadata implements Serializable {
 
     /**
      * Constructor al {@link ro.teamnet.bootstrap.extend.Metadata}
-     * @param field field campul caruia se ataseaza metadatele
-     * @param displayName numele campului afisat in interfata
+     *
+     * @param field           field campul caruia se ataseaza metadatele
+     * @param displayName     numele campului afisat in interfata
      * @param fieldFilterType tipul filtrului asociat campului
      */
     public Metadata(String field, String displayName, String fieldFilterType) {
@@ -70,8 +73,6 @@ public final class Metadata implements Serializable {
         this.displayName = displayName;
         this.fieldFilterType = fieldFilterType;
     }
-
-
 
 
     public String getField() {

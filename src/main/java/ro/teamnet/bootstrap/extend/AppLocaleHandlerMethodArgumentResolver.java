@@ -10,7 +10,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.Map;
 
 
-public class AppLocaleHandlerMethodArgumentResolver  implements HandlerMethodArgumentResolver {
+public class AppLocaleHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String DEFAULT_PARAMETER = "locale";
 
@@ -24,13 +24,13 @@ public class AppLocaleHandlerMethodArgumentResolver  implements HandlerMethodArg
     }
 
     public String resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
-        String filterStrs=webRequest.getParameter(getLocaleParameter());
-        if(filterStrs==null)
+        String filterStrs = webRequest.getParameter(getLocaleParameter());
+        if (filterStrs == null)
             return null;
-        Map<String,String> stringMap= new JSONDeserializer<Map<String,String>>().deserialize(filterStrs,Map.class);
-       return  stringMap.get(getLocaleParameter());
+        Map<String, String> stringMap = new JSONDeserializer<Map<String, String>>().deserialize(filterStrs, Map.class);
+        return stringMap.get(getLocaleParameter());
     }
 
 }

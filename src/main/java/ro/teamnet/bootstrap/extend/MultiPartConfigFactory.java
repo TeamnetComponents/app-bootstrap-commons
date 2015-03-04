@@ -26,6 +26,7 @@ public class MultiPartConfigFactory {
 
     /**
      * Seteaza marimea maxima a fisierelor incarcate
+     *
      * @see #setMaxFileSize(String)
      */
     public void setMaxFileSize(long maxFileSize) {
@@ -35,6 +36,7 @@ public class MultiPartConfigFactory {
     /**
      * Seteaza marimea maxima a fisierelor incarcate. Valorile pot fi sufixate cu "MB"
      * sau "KB" pentru a indica marimile Megabyte sau Kilobyte.
+     *
      * @see #setMaxFileSize(long)
      */
     public void setMaxFileSize(String maxFileSize) {
@@ -43,6 +45,7 @@ public class MultiPartConfigFactory {
 
     /**
      * Seteaza marimea maxima a cererilor de tip multipart/form-data
+     *
      * @see #setMaxRequestSize(String)
      */
     public void setMaxRequestSize(long maxRequestSize) {
@@ -52,6 +55,7 @@ public class MultiPartConfigFactory {
     /**
      * Seteaza marimea maxima a cererilor de tip multipart/form-data. Valorile pot fi sufixate cu "MB"
      * sau "KB" pentru a indica marimile Megabyte sau Kilobyte.
+     *
      * @see #setMaxRequestSize(long)
      */
     public void setMaxRequestSize(String maxRequestSize) {
@@ -60,6 +64,7 @@ public class MultiPartConfigFactory {
 
     /**
      * Seteaza pragul marimii dupa care fisierele for fi scrise pe disc.
+     *
      * @see #setFileSizeThreshold(String)
      */
     public void setFileSizeThreshold(int fileSizeThreshold) {
@@ -69,6 +74,7 @@ public class MultiPartConfigFactory {
     /**
      * Seteaza pragul marimii dupa care fisierele for fi scrise pe disc. Valorile pot fi sufixate cu "MB"
      * sau "KB" pentru a indica marimile Megabyte sau Kilobyte.
+     *
      * @see #setFileSizeThreshold(int)
      */
     public void setFileSizeThreshold(String fileSizeThreshold) {
@@ -77,6 +83,7 @@ public class MultiPartConfigFactory {
 
     /**
      * Analizeaza marimea trimisa ca sir de caractere
+     *
      * @param size marimea ca sir de caractere
      * @return marimea ca numar
      */
