@@ -3,6 +3,7 @@ package ro.teamnet.bootstrap.extend;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -67,6 +68,12 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
         }
 
         return new AppPageImpl<T>(content, appPageable, page.getTotalElements(), filters);
+    }
+
+    @Override
+    public List<T> findAll(List<Filter> filters, Sort sort) {
+        Specification<T> specification = SpecificationBuilder.<T>createSpecification(filters);
+        return findAll(specification, sort);
     }
 
     public Specification<T> createSpecification(final AppPageable pageable) {
