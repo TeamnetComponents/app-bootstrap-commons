@@ -13,7 +13,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 
 public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMethodArgumentResolver {
@@ -41,7 +40,7 @@ public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMet
     private final AppLocaleHandlerMethodArgumentResolver localeResolver;
 
     public AppPageableHandlerMethodArgumentResolver() {
-        this(null,null,null);
+        this(null, null, null);
     }
 
     public AppPageableHandlerMethodArgumentResolver(AppSortHandlerMethodArgumentResolver sortResolver,
@@ -49,19 +48,18 @@ public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMet
                                                     AppLocaleHandlerMethodArgumentResolver localeResolver) {
         super(sortResolver);
         this.sortResolver = sortResolver;
-        this.filtersResolver=filtersResolver;
-        this.localeResolver=localeResolver;
+        this.filtersResolver = filtersResolver;
+        this.localeResolver = localeResolver;
     }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return super.supportsParameter(parameter)|| AppPageable.class.equals(parameter.getParameterType());
+        return super.supportsParameter(parameter) || AppPageable.class.equals(parameter.getParameterType());
     }
 
     @Override
     public Pageable resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer,
                                     NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-
 
 
         Pageable defaultOrFallback = getDefaultFromAnnotationOrFallback(methodParameter);
@@ -76,9 +74,9 @@ public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMet
         pageSize = pageSize > maxPageSize ? maxPageSize : pageSize;
 
         Sort sort = sortResolver.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
-        List<Filter> filters = filtersResolver.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
-        String locale=localeResolver.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
-        return new AppPageRequest(page, pageSize, sort == null ? defaultOrFallback.getSort() : sort, filters,locale);
+        Filters filters = filtersResolver.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
+        String locale = localeResolver.resolveArgument(methodParameter, mavContainer, webRequest, binderFactory);
+        return new AppPageRequest(page, pageSize, sort == null ? defaultOrFallback.getSort() : sort, filters, locale);
     }
 
     private Pageable getDefaultFromAnnotationOrFallback(MethodParameter methodParameter) {
@@ -97,7 +95,6 @@ public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMet
     }
 
 
-
     public static <T> T getSpecificPropertyOrDefaultFromValue(Annotation annotation, String property) {
 
         Object propertyDefaultValue = AnnotationUtils.getDefaultValue(annotation, property);
@@ -107,6 +104,7 @@ public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMet
         return (T) (ObjectUtils.nullSafeEquals(propertyDefaultValue, propertyValue) ? AnnotationUtils.getValue(annotation)
                 : propertyValue);
     }
+
     private static Pageable getDefaultPageRequestFrom(PageableDefault defaults) {
 
         Integer defaultPageNumber = defaults.page();

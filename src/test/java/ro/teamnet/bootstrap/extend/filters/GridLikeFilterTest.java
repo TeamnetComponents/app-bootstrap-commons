@@ -8,15 +8,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ro.teamnet.bootstrap.extend.Filter;
+import ro.teamnet.bootstrap.extend.Filters;
 
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
+import javax.persistence.criteria.Predicate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * Parameterized Test Class for testing grid filtering using like filters (standard like - %filter%, starts_with - filter% and ends_with - %filter)
+ *
  * @author Mihaela Petre
  * @since 02.11.2015
  */
@@ -35,7 +36,6 @@ public class GridLikeFilterTest {
     private GridFiltersCommon gridCommons;
 
     /**
-     *
      * @return list of filters and expected values used as parameters for running Parameterized class {@link ro.teamnet.bootstrap.extend.filters.GridLikeFilterTest}
      */
     @Parameterized.Parameters
@@ -45,7 +45,7 @@ public class GridLikeFilterTest {
         filterEndsWith = new Filter("code", "TEST", Filter.FilterType.ENDS_WITH);
 
         return Arrays.asList(new Object[][]{
-               {filterLike, true}, {filterStartsWith, true}, {filterEndsWith, true}
+                {filterLike, true}, {filterStartsWith, true}, {filterEndsWith, true}
 
         });
     }
@@ -57,22 +57,20 @@ public class GridLikeFilterTest {
 
     /**
      * Method runs before the  testLikeCreateSpecification  method
+     *
      * @throws Exception
      */
     @Before
     public void initMocks() throws Exception {
-        List<Filter> filters = new ArrayList<>();
+        Filters filters = new Filters(Arrays.asList(filterLike, filterStartsWith, filterEndsWith));
         gridCommons = new GridFiltersCommon();
-        filters.add(filterLike);
-        filters.add(filterStartsWith);
-        filters.add(filterEndsWith);
         gridCommons.initCommonMocks(filters);
 
     }
 
     /**
      * Test method for like, starts_with and ends_with filters.
-      */
+     */
     @Test
     public void testLikeCreateSpecification() {
         Assert.assertTrue(likeCreateSpecification(fInput) == fExpected);
@@ -80,11 +78,12 @@ public class GridLikeFilterTest {
 
     /**
      * Generates a boolean value for testing whether the filter argument satisfies the pattern generated using patternBuilder method based on filter type.
+     *
      * @param filter represents value used for filtering
      * @return boolean value.
      */
     public boolean likeCreateSpecification(Filter filter) {
-        Predicate returnPredicate = GridFiltersCommon.callToPredicate( gridCommons.root, gridCommons.appRepositoryImpl, gridCommons.appPageRequest, gridCommons.query, gridCommons.cb);
+        Predicate returnPredicate = GridFiltersCommon.callToPredicate(gridCommons.root, gridCommons.appRepositoryImpl, gridCommons.appPageRequest, gridCommons.query, gridCommons.cb);
         List<LikePredicate> likePredicates = GridFiltersCommon.likePredicates(returnPredicate);
 
         for (LikePredicate lp : likePredicates) {

@@ -18,10 +18,10 @@ public interface AppRepository<T, ID extends Serializable> extends JpaRepository
     /**
      * Retrieves a collection data based on a list of filters and sorting order.
      *
-     * @param filters A list containing filtering criteria.
-     * @param sort A sorting order.
+     * @param filters Filtering criteria.
+     * @param sort    A sorting order.
      * @return A collection of items.
      */
-    List<T> findAll(List<Filter> filters, Sort sort);
+    List<T> findAll(Filters filters, Sort sort);
 
 }

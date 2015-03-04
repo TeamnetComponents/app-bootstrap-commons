@@ -4,71 +4,63 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AppPageRequest extends PageRequest implements AppPageable, Serializable {
 
-    private List<Filter> filters=new ArrayList<>();
+    private Filters filters = new Filters();
     private String locale;
+
     public AppPageRequest(int page, int size) {
         super(page, size);
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
     }
 
     public AppPageRequest(int page, int size, Sort.Direction direction, String... properties) {
         super(page, size, direction, properties);
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
     }
 
-    public AppPageRequest(int page, int size, List<Filter> filters) {
+    public AppPageRequest(int page, int size, Filters filters) {
         super(page, size);
         this.filters = filters;
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
     }
 
     public AppPageRequest(int page, int size, Sort sort) {
         super(page, size, sort);
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
     }
 
-    public AppPageRequest(int page, int size, Sort sort, List<Filter> filters) {
+    public AppPageRequest(int page, int size, Sort sort, Filters filters) {
         super(page, size, sort);
         this.filters = filters;
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
     }
 
 
-
-
-
-
-    public AppPageRequest(int page, int size, Sort sort, List<Filter> filters, String locale) {
+    public AppPageRequest(int page, int size, Sort sort, Filters filters, String locale) {
         super(page, size, sort);
         this.filters = filters;
-        if(filters==null){
-            this.filters=new ArrayList<>();
+        if (filters == null) {
+            this.filters = new Filters();
         }
         this.locale = locale;
     }
 
 
-
-
-
     @Override
-    public List<Filter> getFilters() {
+    public Filters getFilters() {
         return filters;
     }
 

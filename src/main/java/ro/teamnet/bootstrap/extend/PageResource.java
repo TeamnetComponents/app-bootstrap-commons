@@ -9,19 +9,20 @@ import java.util.List;
 
 /**
  * Implementare de baza a {@link ro.teamnet.bootstrap.extend.AppPage}
+ *
  * @param <T>
  */
-public class PageResource<T> implements AppPage<T>{
+public class PageResource<T> implements AppPage<T> {
 
     /**
      * Numele parametrului ce indica numarul paginii
      */
-    public static final String PAGE_PARAM="page";
+    public static final String PAGE_PARAM = "page";
 
     /**
      * Numele parametrului ce indica numarul de elemente de pe o pagina
      */
-    public static final String SIZE_PARAM="size";
+    public static final String SIZE_PARAM = "size";
 
     /**
      * O pagina ce implementeaza {@link ro.teamnet.bootstrap.extend.AppPage}
@@ -30,6 +31,7 @@ public class PageResource<T> implements AppPage<T>{
 
     /**
      * Constructor al {@link ro.teamnet.bootstrap.extend.PageResource}
+     *
      * @param page o pagina de tip {@link ro.teamnet.bootstrap.extend.AppPage}
      */
     public PageResource(AppPage<T> page) {
@@ -39,6 +41,7 @@ public class PageResource<T> implements AppPage<T>{
 
     /**
      * Creaza un obiect {@link org.springframework.web.servlet.support.ServletUriComponentsBuilder}
+     *
      * @return un obiect {@link org.springframework.web.servlet.support.ServletUriComponentsBuilder}
      */
     private ServletUriComponentsBuilder createBuilder() {
@@ -47,7 +50,7 @@ public class PageResource<T> implements AppPage<T>{
 
 
     @Override
-    public List<Filter> getFilters() {
+    public Filters getFilters() {
         return page.getFilters();
     }
 

@@ -9,8 +9,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
@@ -26,15 +24,15 @@ public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgu
         return DEFAULT_PARAMETER;
     }
 
-    public List<Filter> resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Filters resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
         String[] filterStrings = webRequest.getParameterValues(getFilterParameter());
 
         if (filterStrings == null)
             return null;
 
-        List<Filter> filters = new ArrayList<>();
+        Filters filters = new Filters();
         ObjectMapper mapper = new ObjectMapper();
         for (String filterString : filterStrings) {
             Filter filter = null;
@@ -50,7 +48,7 @@ public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgu
             } catch (IOException e) {
                 return null;
             }
-            filters.add(filter);
+            filters.addFilter(filter);
         }
         return filters;
     }

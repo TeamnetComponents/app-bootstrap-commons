@@ -27,7 +27,7 @@ public class FilteringTestsRunner {
         resultList.add(resultLikeFilters);
         resultList.add(resultOtherFilters);
 
-        for(Result result : resultList){
+        for (Result result : resultList) {
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.toString());
             }

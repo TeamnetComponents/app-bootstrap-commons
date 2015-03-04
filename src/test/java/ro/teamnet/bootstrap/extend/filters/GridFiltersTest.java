@@ -1,4 +1,3 @@
-
 package ro.teamnet.bootstrap.extend.filters;
 
 import org.hamcrest.Matchers;
@@ -9,26 +8,29 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ro.teamnet.bootstrap.extend.Filter;
+import ro.teamnet.bootstrap.extend.Filters;
 
-import javax.persistence.criteria.*;
-
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Mihaela Petre
- * Test class for filters
+ *         Test class for filters
  */
 public class GridFiltersTest {
 
     private GridFiltersCommon gridCommons;
 
-    private List<Filter> filters;
+    private Filters filters;
     private static final String SEARCH_TERM = "TEST";
 
 
     /**
      * Instantiate filter and mock objects
+     *
      * @throws Exception
      */
     @Before
@@ -50,34 +52,29 @@ public class GridFiltersTest {
         Filter filterBetween = new Filter("code", values, Filter.FilterType.BETWEEN);
 
         // set filter list
-        filters = new ArrayList<>();
-        filters.add(filterEqual);
-        filters.add(filterLessThan);
-        filters.add(filterLessThanOrEqual);
-        filters.add(filterGreaterThan);
-        filters.add(filterGreaterThanOrEqual);
-        filters.add(filterGreaterThanOrEquatNot);
-        filters.add(filterIn);
-
-        filters.add(filterBetween);
-        gridCommons =  new GridFiltersCommon();
+        filters = new Filters(Arrays.asList(filterEqual, filterLessThan, filterLessThanOrEqual, filterGreaterThan,
+                filterGreaterThanOrEqual, filterGreaterThanOrEquatNot, filterIn, filterBetween));
+        gridCommons = new GridFiltersCommon();
         gridCommons.initCommonMocks(filters);
     }
 
     /**
      * Test method for comparison predicate filters
+     *
      * @throws Exception
      */
     @Test
     public void comparisonCreateSpecification() throws Exception {
-        for(Filter filter : filters){
-            Predicate returnPredicate = GridFiltersCommon.callToPredicate(gridCommons.root, gridCommons.appRepositoryImpl, gridCommons.appPageRequest, gridCommons.query, gridCommons.cb);
-            List<ComparisonPredicate> comparisonPredicates = GridFiltersCommon.comparisonPredicates(returnPredicate,filter.getType().toString());
+        for (Filter filter : filters) {
+            Predicate returnPredicate = GridFiltersCommon.callToPredicate(gridCommons.root,
+                    gridCommons.appRepositoryImpl, gridCommons.appPageRequest, gridCommons.query, gridCommons.cb);
+            List<ComparisonPredicate> comparisonPredicates = GridFiltersCommon.comparisonPredicates(returnPredicate,
+                    filter.getType().toString());
 
             for (ComparisonPredicate cp : comparisonPredicates) {
                 Expression rightOperand = cp.getRightHandOperand();
                 if (rightOperand instanceof LiteralExpression) {
-                    gridCommons.assertsTest(filter.getType(),cp,(LiteralExpression) rightOperand,SEARCH_TERM,filter.getValues() );
+                    gridCommons.assertsTest(filter.getType(), cp, (LiteralExpression) rightOperand, SEARCH_TERM, filter.getValues());
                 }
             }
             Assert.assertEquals(Predicate.BooleanOperator.AND, returnPredicate.getOperator());
@@ -87,11 +84,12 @@ public class GridFiltersTest {
     /**
      * Test method for between predicate filters
      * FilterType: BETWEEN
+     *
      * @throws Exception
      */
     @Test
     public void betweenCreateSpecification() throws Exception {
-        for(Filter filter : filters){
+        for (Filter filter : filters) {
             Predicate returnPredicate = GridFiltersCommon.callToPredicate(gridCommons.root, gridCommons.appRepositoryImpl, gridCommons.appPageRequest, gridCommons.query, gridCommons.cb);
             List<BetweenPredicate> betweenPredicates = GridFiltersCommon.betweenPredicates(returnPredicate);
 

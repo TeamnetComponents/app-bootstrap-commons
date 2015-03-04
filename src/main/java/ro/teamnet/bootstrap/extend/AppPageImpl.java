@@ -9,13 +9,13 @@ import java.util.List;
 
 public class AppPageImpl<T> extends PageImpl<T> implements AppPage<T>, Serializable {
 
-    private List<Filter> filters;
-    private AppPageable pageable2;
+    private Filters filters;
+    private AppPageable appPageable;
     private List<Metadata> metadata;
 
-    public AppPageImpl(List<T> content, AppPageable pageable, long total, List<Filter> filters) {
+    public AppPageImpl(List<T> content, AppPageable pageable, long total, Filters filters) {
         super(content, pageable, total);
-        this.pageable2=pageable;
+        this.appPageable = pageable;
         this.filters = filters;
     }
 
@@ -24,21 +24,21 @@ public class AppPageImpl<T> extends PageImpl<T> implements AppPage<T>, Serializa
     }
 
     public AppPageImpl(List<T> content, AppPageable pageable,
-                       long total, List<Filter> filters, List<Metadata> metadata) {
+                       long total, Filters filters, List<Metadata> metadata) {
         super(content, pageable, total);
         this.filters = filters;
-        this.pageable2 = pageable;
+        this.appPageable = pageable;
         this.metadata = metadata;
     }
 
     @Override
-    public List<Filter> getFilters() {
+    public Filters getFilters() {
         return filters;
     }
 
     @Override
     public AppPageable getPageable() {
-        return pageable2;
+        return appPageable;
     }
 
     @Override
@@ -51,7 +51,8 @@ public class AppPageImpl<T> extends PageImpl<T> implements AppPage<T>, Serializa
     @Override
     public List<T> getContent() {
         try {
-            Field field=PageImpl.class.getDeclaredField("content");field.setAccessible(true);
+            Field field = PageImpl.class.getDeclaredField("content");
+            field.setAccessible(true);
             return (List<T>) field.get(this);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return super.getContent();

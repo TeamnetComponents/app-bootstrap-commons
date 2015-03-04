@@ -54,8 +54,8 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
 
     @Override
     public AppPage<T> findAll(AppPageable appPageable) {
-        List<Filter> filters = appPageable.getFilters() == null
-                ? new ArrayList<Filter>()
+        Filters filters = appPageable.getFilters() == null
+                ? new Filters()
                 : appPageable.getFilters();
 
         Page<T> page = filters.isEmpty()
@@ -71,7 +71,7 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
     }
 
     @Override
-    public List<T> findAll(List<Filter> filters, Sort sort) {
+    public List<T> findAll(Filters filters, Sort sort) {
         Specification<T> specification = SpecificationBuilder.<T>createSpecification(filters);
         return findAll(specification, sort);
     }

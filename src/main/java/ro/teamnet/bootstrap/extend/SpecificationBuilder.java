@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SpecificationBuilder {
 
-    public static <T> Specification<T> createSpecification(final List<Filter> filters) {
+    public static <T> Specification<T> createSpecification(final Filters filters) {
 
         return new Specification<T>() {
             @Override
