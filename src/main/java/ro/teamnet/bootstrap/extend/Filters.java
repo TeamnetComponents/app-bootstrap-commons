@@ -36,4 +36,13 @@ public class Filters implements Iterable<Filter> {
     public Iterator<Filter> iterator() {
         return filters.iterator();
     }
+
+    /**
+     * Sets the filters with the ones provided.
+     *
+     * @param filters A list of filters to replace the underlying one.
+     */
+    public void setFilters(List<Filter> filters) {
+        this.filters = filters;
+    }
 }
