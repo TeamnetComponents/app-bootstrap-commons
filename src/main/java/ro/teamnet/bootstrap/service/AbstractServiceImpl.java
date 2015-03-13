@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-import ro.teamnet.bootstrap.extend.AppPageRequest;
-import ro.teamnet.bootstrap.extend.AppRepository;
-import ro.teamnet.bootstrap.extend.Filter;
-import ro.teamnet.bootstrap.extend.Filters;
+import ro.teamnet.bootstrap.extend.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -47,9 +44,9 @@ public abstract class AbstractServiceImpl<T extends Serializable, ID extends Ser
 
 
     @Override
-    public List<T> findAll() {
+    public AppPage<T> findAll(AppPageable appPageable) {
         log.debug("REST request to get all records");
-        return repository.findAll();
+        return repository.findAll(appPageable);
     }
 
 
@@ -66,35 +63,4 @@ public abstract class AbstractServiceImpl<T extends Serializable, ID extends Ser
         log.debug("REST request to delete : {}", id);
         repository.delete(id);
     }
-
-    protected final Sort constructSort(final String sortBy, final String sortOrder) {
-        Sort sortInfo = null;
-        if (sortBy != null) {
-            sortInfo = new Sort(Sort.Direction.fromString(sortOrder), sortBy);
-        }
-        return sortInfo;
-    }
-
-    @Override
-    public Page<T> findAllPaginatedAndSortedRawWithFilter(int page, int size, String sortBy, String sortOrder, String filterObject) {
-        final Sort sort = constructSort(sortBy, sortOrder);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Filters filters = new Filters();
-        if (filterObject != null) {
-            try {
-                filterObject = "[" + filterObject + "]";
-                filters.addFilters(
-                    Collection.class.<Filter>cast(
-                        objectMapper.readValue(filterObject, objectMapper.getTypeFactory().constructCollectionType(List.class, Filter.class))
-                    )
-                );
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        AppPageRequest appPageRequest = new AppPageRequest(page, size, sort, filters);
-        return repository.findAll(appPageRequest);
-    }
-
-
 }
