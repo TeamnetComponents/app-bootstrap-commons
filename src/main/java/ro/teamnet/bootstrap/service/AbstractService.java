@@ -12,6 +12,8 @@ public interface AbstractService<T extends Serializable, ID extends Serializable
 
     T save(T t);
 
+    List<T> findAll();
+
     AppPage<T> findAll(AppPageable appPageable);
 
     T findOne(ID id);

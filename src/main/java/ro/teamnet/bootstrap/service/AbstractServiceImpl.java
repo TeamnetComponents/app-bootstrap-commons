@@ -42,6 +42,11 @@ public abstract class AbstractServiceImpl<T extends Serializable, ID extends Ser
         return repository.save(t);
     }
 
+    @Override
+    public List<T> findAll() {
+        log.debug("REST request to get all records");
+        return repository.findAll();
+    }
 
     @Override
     public AppPage<T> findAll(AppPageable appPageable) {

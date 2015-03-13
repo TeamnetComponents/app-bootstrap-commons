@@ -65,8 +65,18 @@ public abstract class AbstractResource<T extends Serializable, ID extends Serial
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public AppPage<T> getAll(AppPageable appPageable) {
+    public List<T> getAll() {
         log.debug("REST request to get all fields");
+        return abstractService.findAll();
+    }
+
+
+    @RequestMapping(value = "/list",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public AppPage<T> getAll(AppPageable appPageable) {
+        log.debug("REST request to get all fields for the given page: " + appPageable);
         return abstractService.findAll(appPageable);
     }
 
