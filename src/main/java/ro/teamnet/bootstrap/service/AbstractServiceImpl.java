@@ -50,7 +50,7 @@ public abstract class AbstractServiceImpl<T extends Serializable, ID extends Ser
 
     @Override
     public AppPage<T> findAll(AppPageable appPageable) {
-        log.debug("REST request to get all records");
+        log.debug("REST request to get all records with pagination");
         return repository.findAll(appPageable);
     }
 

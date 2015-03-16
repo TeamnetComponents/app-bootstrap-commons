@@ -19,7 +19,6 @@ import ro.teamnet.bootstrap.service.AbstractService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.List;
 public abstract class AbstractResource<T extends Serializable, ID extends Serializable> {
 
     private final Logger log = LoggerFactory.getLogger(AbstractResource.class);
-
 
     public AbstractService<T, ID> abstractService;
 
@@ -85,7 +83,7 @@ public abstract class AbstractResource<T extends Serializable, ID extends Serial
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<T> get(@PathVariable ID id, HttpServletResponse response) {
+    public ResponseEntity<T> get(@PathVariable ID id) {
         log.debug("REST request to get  : {}", id);
         T t = abstractService.findOne(id);
         if (t == null) {
