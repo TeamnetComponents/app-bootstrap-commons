@@ -13,7 +13,24 @@ import java.util.List;
  * Utility class for building specifications.
  */
 public class SpecificationBuilder {
+    private static Path findPath(Root root,Filter filter){
+        Path path = null;
+        if(filter.getProperty().indexOf(".")>0){
+            String[] str=filter.getProperty().split("\\.");
+            for (String prop : str) {
+                if(path==null){
+                    path=root.get(prop);
+                }else{
+                    path=path.get(prop);
+                }
+            }
 
+        }else{
+            path=root.get(filter.getProperty());
+        }
+
+        return path;
+    }
     public static <T> Specification<T> createSpecification(final Filters filters) {
 
         return new Specification<T>() {
@@ -26,7 +43,7 @@ public class SpecificationBuilder {
                 Predicate predicate = null;
 
                 for (Filter filter : filters) {
-                    Path path = root.get(filter.getProperty());
+                    Path path = findPath(root,filter);
                     switch (filter.getType()) {
                         case LIKE:
                         case STARTS_WITH:
@@ -59,7 +76,7 @@ public class SpecificationBuilder {
                             try {
                                 predicate = predicateUtil.getBetweenPredicate(path, filter.getValues(), filter.getCaseSensitive());
                             } catch (InvalidNumberOfFiltersException e) {
-                                // tratare exceptie
+                                throw new RuntimeException(e);
                             }
                             break;
                     }
@@ -73,6 +90,9 @@ public class SpecificationBuilder {
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
+
+
+
     }
 
     /**
@@ -268,6 +288,9 @@ public class SpecificationBuilder {
         Predicate applyNot(Predicate predicate) {
             return criteriaBuilder.not(predicate);
         }
+
+
+
 
     }
 
