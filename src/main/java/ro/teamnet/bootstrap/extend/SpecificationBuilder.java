@@ -13,24 +13,22 @@ import java.util.List;
  * Utility class for building specifications.
  */
 public class SpecificationBuilder {
-    private static Path findPath(Root root,Filter filter){
-        Path path = null;
-        if(filter.getProperty().indexOf(".")>0){
-            String[] str=filter.getProperty().split("\\.");
-            for (String prop : str) {
-                if(path==null){
-                    path=root.get(prop);
-                }else{
-                    path=path.get(prop);
-                }
-            }
 
-        }else{
-            path=root.get(filter.getProperty());
+    /**
+     * Retrieves a simple or compound attribute path based on the given filter, by splitting the filter into attributes.
+     *
+     * @param root   the root entity
+     * @param filter a simple or compound filter
+     * @return the attribute path
+     */
+    private static Path findPath(Root root, Filter filter) {
+        Path path = root;
+        for (String attribute : filter.getAttributes()) {
+            path = path.get(attribute);
         }
-
         return path;
     }
+
     public static <T> Specification<T> createSpecification(final Filters filters) {
 
         return new Specification<T>() {
@@ -43,7 +41,7 @@ public class SpecificationBuilder {
                 Predicate predicate = null;
 
                 for (Filter filter : filters) {
-                    Path path = findPath(root,filter);
+                    Path path = findPath(root, filter);
                     switch (filter.getType()) {
                         case LIKE:
                         case STARTS_WITH:
@@ -90,7 +88,6 @@ public class SpecificationBuilder {
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
-
 
 
     }
@@ -288,8 +285,6 @@ public class SpecificationBuilder {
         Predicate applyNot(Predicate predicate) {
             return criteriaBuilder.not(predicate);
         }
-
-
 
 
     }

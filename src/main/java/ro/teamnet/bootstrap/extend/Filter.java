@@ -273,4 +273,12 @@ public final class Filter implements Serializable {
         }
         return filterPattern;
     }
+
+    /**
+     * Splits filter property into attributes, when the current filter is a compound.
+     * @return an array of attributes for the current filter
+     */
+    public String[] getAttributes() {
+        return property == null || property.isEmpty() ? new String[0] : property.split("\\.");
+    }
 }
