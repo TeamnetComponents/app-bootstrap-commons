@@ -2,6 +2,7 @@ package ro.teamnet.bootstrap.extend;
 
 import com.google.common.collect.Iterables;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.ClassUtils;
 import ro.teamnet.bootstrap.exception.InvalidNumberOfFiltersException;
 
 import javax.persistence.criteria.*;
@@ -29,6 +30,16 @@ public class SpecificationBuilder {
         return path;
     }
 
+    /**
+     * Check if the java type of the given path is a boolean.
+     *
+     * @param path - the path to check
+     * @return true if the given path is a boolean
+     */
+    private static boolean isBoolean(Path path) {
+        return ClassUtils.isAssignable(Boolean.class, path.getJavaType());
+    }
+
     public static <T> Specification<T> createSpecification(final Filters filters) {
 
         return new Specification<T>() {
@@ -38,58 +49,100 @@ public class SpecificationBuilder {
                 List<Predicate> predicates = new ArrayList<>();
 
                 PredicateUtil predicateUtil = new PredicateUtil(cb);
-                Predicate predicate = null;
 
                 for (Filter filter : filters) {
                     Path path = findPath(root, filter);
-                    switch (filter.getType()) {
-                        case LIKE:
-                        case STARTS_WITH:
-                        case ENDS_WITH:
-                            if (path.getJavaType() == String.class) {
-                                String filterPattern = (Filter.filterPatternBuilder(filter.getValue(), filter.getType()));
-                                predicate = predicateUtil.getLikePredicate(path, filterPattern, filter.getCaseSensitive());
-                                break;
-                            }
-                        case EQUAL:
-                            predicate = predicateUtil.getEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
-                            break;
-                        case IN:
-                            predicate = predicateUtil.getInPredicate(path, filter.getValues(), filter.getCaseSensitive());
-                            break;
-                        case LESS_THAN:
-                            predicate = predicateUtil.getLessThanPredicate(path, filter.getValue(), filter.getCaseSensitive());
-                            break;
-                        case LESS_THAN_OR_EQUAL:
-                            predicate = predicateUtil.getLessThanOrEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
-                            break;
-                        case GREATER_THAN:
-                            predicate = predicateUtil.getGreaterThanPredicate(path, filter.getValue(), filter.getCaseSensitive());
-                            break;
-                        case GREATER_THAN_OR_EQUAL:
-                            predicate = predicateUtil.getGreaterThanOrEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
 
-                            break;
-                        case BETWEEN:
-                            try {
-                                predicate = predicateUtil.getBetweenPredicate(path, filter.getValues(), filter.getCaseSensitive());
-                            } catch (InvalidNumberOfFiltersException e) {
-                                throw new RuntimeException(e);
-                            }
-                            break;
-                    }
-
-                    if (filter.getNegation()) {
-                        predicates.add(predicateUtil.applyNot(predicate));
+                    if (isBoolean(path)) {
+                        predicates.add(getBooleanPredicate(predicateUtil, filter, path));
                     } else {
-                        predicates.add(predicate);
+                        predicates.add(getNonBooleanPredicate(predicateUtil, filter, path));
                     }
                 }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
+
+            /**
+             * Creates a predicate by applying a custom {@link Filter} to a boolean expression.
+             * Supported filter types are: {@link ro.teamnet.bootstrap.extend.Filter.FilterType#EQUAL} and
+             * {@link ro.teamnet.bootstrap.extend.Filter.FilterType#LIKE}.
+             * If the filter type is unsupported or the filter value cannot be converted to a valid boolean expression,
+             * the returned predicate will always evaluate as false.
+             *
+             * @param predicateUtil utility class for building predicates
+             * @param filter a custom filter
+             * @param path the boolean expression to evaluate
+             * @return a predicate that tests the expression against a custom filter
+             */
+            private Predicate getBooleanPredicate(PredicateUtil predicateUtil, Filter filter, Path path) {
+                if (Filter.FilterType.EQUAL.equals(filter.getType()) || filter.getType().equals(Filter.FilterType.LIKE)) {
+                    Predicate booleanEqualPredicate = predicateUtil.getBooleanEqualPredicate(path, filter.getValue());
+                    return filter.getNegation() ? booleanEqualPredicate.not() : booleanEqualPredicate;
+                }
+                return predicateUtil.getFalsePredicate();
+            }
+
+            /**
+             * Creates a predicate by applying a custom {@link Filter} to a non-boolean expression.
+             * If the filter type is unsupported, the returned predicate will always evaluate as false.
+             * Predicates {@link ro.teamnet.bootstrap.extend.Filter.FilterType#STARTS_WITH} and
+             * {@link ro.teamnet.bootstrap.extend.Filter.FilterType#ENDS_WITH} are currently supported for String types
+             * only.
+             *
+             * @param predicateUtil utility class for building predicates
+             * @param filter a custom filter
+             * @param path the boolean expression to evaluate
+             * @return a predicate that tests the expression against a custom filter
+             */
+            private Predicate getNonBooleanPredicate(PredicateUtil predicateUtil, Filter filter, Path path) {
+                Predicate predicate = predicateUtil.getFalsePredicate();
+                switch (filter.getType()) {
+                    case LIKE:
+                        if (!isString(path)) {
+                            predicate = predicateUtil.getEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
+                            break;
+                        }
+                    case STARTS_WITH:
+                    case ENDS_WITH:
+                        if (isString(path)) {
+                            String filterPattern = (Filter.filterPatternBuilder(filter.getValue(), filter.getType()));
+                            predicate = predicateUtil.getLikePredicate(path, filterPattern, filter.getCaseSensitive());
+                            break;
+                        }
+                    case EQUAL:
+                        predicate = predicateUtil.getEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
+                        break;
+                    case IN:
+                        predicate = predicateUtil.getInPredicate(path, filter.getValues(), filter.getCaseSensitive());
+                        break;
+                    case LESS_THAN:
+                        predicate = predicateUtil.getLessThanPredicate(path, filter.getValue(), filter.getCaseSensitive());
+                        break;
+                    case LESS_THAN_OR_EQUAL:
+                        predicate = predicateUtil.getLessThanOrEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
+                        break;
+                    case GREATER_THAN:
+                        predicate = predicateUtil.getGreaterThanPredicate(path, filter.getValue(), filter.getCaseSensitive());
+                        break;
+                    case GREATER_THAN_OR_EQUAL:
+                        predicate = predicateUtil.getGreaterThanOrEqualPredicate(path, filter.getValue(), filter.getCaseSensitive());
+
+                        break;
+                    case BETWEEN:
+                        try {
+                            predicate = predicateUtil.getBetweenPredicate(path, filter.getValues(), filter.getCaseSensitive());
+                        } catch (InvalidNumberOfFiltersException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                }
+                return filter.getNegation() ? predicate.not() : predicate;
+            }
         };
+    }
 
-
+    private static boolean isString(Path path) {
+        return ClassUtils.isAssignable(String.class, path.getJavaType());
     }
 
     /**
@@ -188,6 +241,18 @@ public class SpecificationBuilder {
         }
 
         /**
+         * Generate a predicate testing whether the path argument has the same boolean value as the value argument.
+         * It uses {@link  javax.persistence.criteria.CriteriaBuilder#equal} method.
+         *
+         * @param path
+         * @param value a string representation of a boolean value
+         * @return predicate
+         */
+        protected Predicate getBooleanEqualPredicate(Path path, String value) {
+            return Boolean.getBoolean(value) ? criteriaBuilder.isTrue(path) : criteriaBuilder.isFalse(path);
+        }
+
+        /**
          * Generates a predicate for testing whether  the path argument is a member of the collection.
          * It uses {@link  javax.persistence.criteria.CriteriaBuilder#in} method.
          *
@@ -212,7 +277,6 @@ public class SpecificationBuilder {
         protected Predicate getLessThanPredicate(Path path, String value, Boolean caseSensitive) {
             return criteriaBuilder.lessThan(getUpperCaseExpression(path, caseSensitive), getUpperCaseValue(value, caseSensitive));
         }
-
 
         /**
          * Generates a predicate for testing whether the path argument is less than or equal to the value argument.
@@ -276,17 +340,13 @@ public class SpecificationBuilder {
         }
 
         /**
-         * Generates a negation of the given predicate.
-         * It uses {@link  javax.persistence.criteria.CriteriaBuilder#not} method.
+         * Creates a predicate that is always false. Used as initial value, in order to avoid null pointer exception.
          *
-         * @param predicate predicate
-         * @return predicate negation
+         * @return a predicate that will always evaluate as false
          */
-        Predicate applyNot(Predicate predicate) {
-            return criteriaBuilder.not(predicate);
+        protected Predicate getFalsePredicate() {
+            return criteriaBuilder.isTrue(criteriaBuilder.literal(false));
         }
-
-
     }
 
 }
