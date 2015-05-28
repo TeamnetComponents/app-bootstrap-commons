@@ -54,9 +54,9 @@ public abstract class AbstractResource<T extends Serializable, ID extends Serial
 
     @RequestMapping(method = RequestMethod.POST)
     @Timed
-    public void create(@RequestBody T t) {
+    public T create(@RequestBody T t) {
         log.debug("REST request to save : {}", t);
-        abstractService.save(t);
+        return abstractService.save(t);
     }
 
 
