@@ -59,6 +59,15 @@ public abstract class AbstractResource<T extends Serializable, ID extends Serial
         return abstractService.save(t);
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    @Timed
+    public T update(@RequestBody T t) {
+        log.debug("REST request to save : {}", t);
+        return abstractService.save(t);
+    }
+
+
+
 
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -100,5 +109,9 @@ public abstract class AbstractResource<T extends Serializable, ID extends Serial
     public void delete(@PathVariable ID id) {
         log.debug("REST request to delete : {}", id);
         abstractService.delete(id);
+    }
+
+    public AbstractService<T,ID> getService(){
+        return abstractService;
     }
 }
