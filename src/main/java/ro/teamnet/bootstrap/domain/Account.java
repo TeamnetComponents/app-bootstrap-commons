@@ -260,6 +260,7 @@ public class Account extends AbstractAuditingEntity implements UserDetails, Seri
             }
         }
         authorities.addAll(getPermissions());
+        authorities.addAll(getModuleRights());
         return authorities;
     }
 
