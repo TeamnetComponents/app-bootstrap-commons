@@ -61,7 +61,9 @@ public class SpecificationBuilder {
 
                     if (isBoolean(path)) {
                         predicates.add(getBooleanPredicate(predicateUtil, filter, path));
-                    } else {
+                    }if(isDate(path)) {
+
+                    }else {
                         predicates.add(getNonBooleanPredicate(predicateUtil, filter, path));
                     }
                 }
