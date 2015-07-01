@@ -1,5 +1,6 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
+import org.springframework.security.core.GrantedAuthority;
 import ro.teamnet.bootstrap.domain.Account;
 import ro.teamnet.bootstrap.domain.Module;
 import ro.teamnet.bootstrap.domain.ModuleRight;
@@ -24,10 +25,9 @@ public class AccountDTO {
     private List<RoleDTO> roles = new ArrayList<>();
     private HashMap<String, ModuleRightDTO> moduleRights = new HashMap<>();
 
-    public AccountDTO() {
-    }
 
-    public AccountDTO(Account account) {
+
+    public AccountDTO(Account account,Collection<GrantedAuthority> moduleRightSet){
         this.id = account.getId();
         this.login = account.getLogin();
         this.password = account.getPassword();
@@ -37,32 +37,21 @@ public class AccountDTO {
         this.langKey = account.getLangKey();
         this.gender = account.getGender();
 
-        // load account module rights
-        for(ModuleRight mr: account.getModuleRights()) {
-            if(mr.getModule() != null){
+        for(GrantedAuthority grantedAuthority: moduleRightSet) {
+            if(grantedAuthority instanceof ModuleRight && ((ModuleRight)grantedAuthority).getModule() != null){
+                ModuleRight mr=(ModuleRight)grantedAuthority;
                 moduleRights.put(
                         mr.getModule().getCode()+"_"+mr.getModuleRightCode(),
                         loadModuleRightDTO(mr, ModuleRightSource.ACCOUNT.name())
                 );
+            }else if(grantedAuthority instanceof Role){
+                Role role= (Role) grantedAuthority;
+                roles.add(new RoleDTO(role.getId(), role.getVersion(), role.getCode(), role.getDescription(),
+                        role.getOrder(), role.getValidFrom(), role.getValidTo(), role.getActive(), role.getLocal(), null));
             }
-        }
-
-        // load roles
-        for (Role role : account.getRoles()) {
-            // load role module rights
-            for(ModuleRight mr: role.getModuleRights()) {
-                if(mr.getModule() != null){
-                    moduleRights.put(
-                            mr.getModule().getCode() + "_" + mr.getModuleRightCode(),
-                            loadModuleRightDTO(mr, ModuleRightSource.ROLE.name())
-                    );
-                }
-            }
-
-            roles.add(new RoleDTO(role.getId(), role.getVersion(), role.getCode(), role.getDescription(),
-                    role.getOrder(), role.getValidFrom(), role.getValidTo(), role.getActive(), role.getLocal(), null));
         }
     }
+
 
     private ModuleRightDTO loadModuleRightDTO(ModuleRight mr, String source) {
         Module module = mr.getModule();
@@ -115,17 +104,6 @@ public class AccountDTO {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("AccountDTO{");
-        sb.append("id='").append(id).append('\'');
-        sb.append("login='").append(login).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", firstName='").append(firstName).append('\'');
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", langKey='").append(langKey).append('\'');
-        sb.append(", roles=").append(roles);
-        sb.append(", moduleRights=").append(moduleRights);
-        sb.append('}');
-        return sb.toString();
+        return "AccountDTO{" + "id='" + id + '\'' + "login='" + login + '\'' + ", password='" + password + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", langKey='" + langKey + '\'' + ", roles=" + roles + ", moduleRights=" + moduleRights + '}';
     }
 }

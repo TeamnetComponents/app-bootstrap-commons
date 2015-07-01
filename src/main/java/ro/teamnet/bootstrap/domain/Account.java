@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A user.
@@ -20,7 +19,7 @@ import java.util.*;
 @Table(name = "T_ACCOUNT")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Account extends AbstractAuditingEntity implements UserDetails, Serializable {
+public class Account extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @Column(name = "ID_ACCOUNT")
@@ -66,19 +65,19 @@ public class Account extends AbstractAuditingEntity implements UserDetails, Seri
     @Column(name = "gender", length = 20)
     private String gender;
 
-    @ManyToMany (fetch=FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "T_ACCOUNT_ROLES",
             joinColumns = {@JoinColumn(name = "fk_account", referencedColumnName = "id_account")},
             inverseJoinColumns = {@JoinColumn(name = "fk_role", referencedColumnName = "id_role")})
-    private Collection<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "T_ACCOUNT_MODULE_RIGHTS",
             joinColumns = {@JoinColumn(name = "fk_account", referencedColumnName = "id_account")},
             inverseJoinColumns = {@JoinColumn(name = "fk_module_right", referencedColumnName = "id_module_right")})
-    private Collection<ModuleRight> moduleRights = new HashSet<>();
+    private Set<ModuleRight> moduleRights = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "account")
@@ -101,7 +100,7 @@ public class Account extends AbstractAuditingEntity implements UserDetails, Seri
         this.login = login;
     }
 
-    @Override
+
     public String getPassword() {
         return password;
     }
@@ -166,19 +165,19 @@ public class Account extends AbstractAuditingEntity implements UserDetails, Seri
         this.gender = gender;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public Collection<ModuleRight> getModuleRights() {
+    public Set<ModuleRight> getModuleRights() {
         return moduleRights;
     }
 
-    public void setModuleRights(Collection<ModuleRight> moduleRights) {
+    public void setModuleRights(Set<ModuleRight> moduleRights) {
         this.moduleRights = moduleRights;
     }
 
@@ -190,79 +189,7 @@ public class Account extends AbstractAuditingEntity implements UserDetails, Seri
         this.persistentTokens = persistentTokens;
     }
 
-    /* (non-Javadoc)
-    * @see org.springframework.security.core.userdetails.UserDetails#isEnabled()
-    */
-    @Override
-    @Transient
-    public boolean isEnabled() { return activated; }
 
-    /* (non-Javadoc)
-	 * @see org.springframework.security.core.userdetails.UserDetails#getUsername()
-	 */
-    @Override
-    @Transient
-    public String getUsername() { return login; }
-
-    /* (non-Javadoc)
-	 * @see org.springframework.security.core.userdetails.UserDetails#isAccountNonExpired()
-	 */
-    @Override
-    @Transient
-    public boolean isAccountNonExpired() { return true; }
-
-    /* (non-Javadoc)
-     * @see org.springframework.security.core.userdetails.UserDetails#isAccountNonLocked()
-     */
-    @Override
-    @Transient
-    public boolean isAccountNonLocked() { return true; }
-
-    /* (non-Javadoc)
-     * @see org.springframework.security.core.userdetails.UserDetails#isCredentialsNonExpired()
-     */
-    @Override
-    @Transient
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Transient
-    public Set<ModuleRight> getPermissions() {
-        Set<ModuleRight> perms = new HashSet<ModuleRight>();
-        for (Role role : getRoles()) {
-            perms.addAll(role.getModuleRights());
-        }
-        return perms;
-    }
-
-    /* (non-Javadoc)
-	 * @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
-	 */
-    @Override
-    @Transient
-    public Collection<GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.addAll(getRoles());
-        for (Role role : getRoles()) {
-            for (ModuleRight moduleRight : role.getModuleRights()) {
-                if(moduleRight.getModule()!=null&&moduleRight.getModule().getModuleRights()!=null){
-                    for (ModuleRight right : moduleRight.getModule().getModuleRights()) {
-                        if(right.getModule()!=null){
-                            right.getModule().setModuleRights(null);
-                        }
-                        authorities.add(right);
-                    }
-                }
-                if(moduleRight.getModule()!=null){
-                    moduleRight.getModule().setModuleRights(null);
-                }
-
-                authorities.add(moduleRight);
-            }
-        }
-        authorities.addAll(getPermissions());
-        authorities.addAll(getModuleRights());
-        return authorities;
-    }
 
     @Override
     public boolean equals(Object o) {

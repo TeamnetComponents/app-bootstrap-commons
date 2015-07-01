@@ -7,9 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * A Role. This entity is used as a {@link GrantedAuthority} and represents an authority.
@@ -55,12 +53,12 @@ public class Role extends AbstractAuditingEntity implements Serializable, Grante
     @Column(name = "LOCAL")
     private Short local;
 
-    @ManyToMany (fetch=FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "T_ROLE_MODULE_RIGHTS",
         joinColumns = {@JoinColumn(name = "fk_role", referencedColumnName = "id_role")},
         inverseJoinColumns = {@JoinColumn(name = "fk_module_right", referencedColumnName = "id_module_right")})
-    private Collection<ModuleRight> moduleRights = new ArrayList<>();
+    private Set<ModuleRight> moduleRights = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -134,7 +132,7 @@ public class Role extends AbstractAuditingEntity implements Serializable, Grante
         this.local = local;
     }
 
-    public Collection<ModuleRight> getModuleRights() {
+    public Set<ModuleRight> getModuleRights() {
         return moduleRights;
     }
 
