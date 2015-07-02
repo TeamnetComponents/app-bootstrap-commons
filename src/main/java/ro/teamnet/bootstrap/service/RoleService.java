@@ -16,4 +16,6 @@ public interface RoleService extends AbstractService<Role,Long>{
 
     public void update(Role role, RoleDTO roleDTO);
 
+    public Role getOneById(Long id);
+
 }
