@@ -43,4 +43,28 @@
         </delete>
 
     </changeSet>
+
+    <!-- Delete Module -->
+    <changeSet id="20150630#2" author="security-bootstrap" failOnError="true">
+
+        <delete tableName="T_ROLE_MODULE_RIGHTS">
+            <where> fk_role = (SELECT ID_ROLE from T_ROLE where CODE = 'ROLE_USER' ) and
+            fk_module_right = (SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 1
+                AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'METRICS'))</where>
+        </delete>
+        <delete tableName="T_ROLE_MODULE_RIGHTS">
+            <where> fk_role = (SELECT ID_ROLE from T_ROLE where CODE = 'ROLE_USER' ) and
+                fk_module_right = (SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 1
+                    AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'TRACKER'))
+            </where>
+        </delete>
+        <delete tableName="T_ROLE_MODULE_RIGHTS">
+            <where> fk_role = (SELECT ID_ROLE from T_ROLE where CODE = 'ROLE_USER' ) and
+                fk_module_right = (SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 1
+                    AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'SESSION'))
+            </where>
+        </delete>
+
+    </changeSet>
+
 </databaseChangeLog>
