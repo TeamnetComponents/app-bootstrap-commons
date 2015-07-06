@@ -14,6 +14,8 @@ public interface RoleService extends AbstractService<Role,Long>{
 
     public Role update(Role role, RoleDTO roleDTO);
 
+    public Boolean updateRoleById(Long id, RoleDTO roleDTO);
+
     public Role getOneById(Long id);
 
     Set<Role> getAllWithModuleRights();
