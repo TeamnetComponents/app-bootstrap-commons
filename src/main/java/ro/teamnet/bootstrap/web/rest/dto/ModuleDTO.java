@@ -1,10 +1,14 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ro.teamnet.bootstrap.domain.Module;
+import ro.teamnet.bootstrap.domain.ModuleRight;
 import ro.teamnet.bootstrap.domain.util.ModuleTypeEnum;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ModuleDTO {
@@ -89,6 +93,30 @@ public class ModuleDTO {
     @JsonInclude
     public String getModuleType(){
         return ModuleTypeEnum.getCodeByValue(getType());
+    }
+
+    @JsonIgnore
+    public Module getModule() {
+        Module m = new Module();
+
+        m.setId(this.getId());
+        m.setVersion(this.getVersion());
+        m.setCode(this.getCode());
+        m.setDescription(this.getDescription());
+        m.setType(this.getType());
+
+        if(this.getModuleRights() != null) {
+            List<ModuleRight> mrs = new ArrayList<ModuleRight>();
+            for(ModuleRightDTO mrDTO: this.getModuleRights()) {
+                mrs.add(mrDTO.getModuleRight());
+            }
+
+            m.setModuleRights(mrs);
+        }
+
+        m.setParentModule(this.getParentModule());
+
+        return m;
     }
 
     @Override

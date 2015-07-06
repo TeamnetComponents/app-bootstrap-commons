@@ -1,6 +1,8 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import ro.teamnet.bootstrap.domain.ModuleRight;
 import ro.teamnet.bootstrap.domain.util.ModuleRightTypeEnum;
 
 public class ModuleRightDTO {
@@ -65,6 +67,18 @@ public class ModuleRightDTO {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    @JsonIgnore
+    public ModuleRight getModuleRight() {
+        ModuleRight mr = new ModuleRight();
+
+        mr.setId(this.getId());
+        mr.setRight(this.getRight());
+        mr.setVersion(this.getVersion());
+        mr.setModule(this.getModule() != null ? this.getModule().getModule() : null);
+
+        return mr;
     }
 
     @Override
