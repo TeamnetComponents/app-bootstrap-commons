@@ -877,4 +877,14 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20150703#1" author="security-bootstrap">
+        <comment>Update menu admin module code</comment>
+        <update tableName="T_MODULE">
+            <column name="code" value="MENU"/>
+            <where>
+                code = 'MENUS'
+            </where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>
