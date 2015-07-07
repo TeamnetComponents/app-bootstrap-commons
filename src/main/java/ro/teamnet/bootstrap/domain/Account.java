@@ -70,7 +70,7 @@ public class Account extends AbstractAuditingEntity implements Serializable {
             name = "T_ACCOUNT_ROLES",
             joinColumns = {@JoinColumn(name = "fk_account", referencedColumnName = "id_account")},
             inverseJoinColumns = {@JoinColumn(name = "fk_role", referencedColumnName = "id_role")})
-    private Set<RoleBase> roleBases = new HashSet<>();
+    private Set<RoleBase> roles = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -165,12 +165,12 @@ public class Account extends AbstractAuditingEntity implements Serializable {
         this.gender = gender;
     }
 
-    public Set<RoleBase> getRoleBases() {
-        return roleBases;
+    public Set<RoleBase> getRoles() {
+        return roles;
     }
 
-    public void setRoleBases(Set<RoleBase> roleBases) {
-        this.roleBases = roleBases;
+    public void setRoles(Set<RoleBase> roles) {
+        this.roles = roles;
     }
 
     public Set<ModuleRight> getModuleRights() {
