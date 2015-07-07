@@ -2,9 +2,9 @@ package ro.teamnet.bootstrap.web.rest.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import ro.teamnet.bootstrap.domain.Account;
+import ro.teamnet.bootstrap.domain.ApplicationRole;
 import ro.teamnet.bootstrap.domain.Module;
 import ro.teamnet.bootstrap.domain.ModuleRight;
-import ro.teamnet.bootstrap.domain.Role;
 import ro.teamnet.bootstrap.domain.util.ModuleRightSource;
 
 import javax.validation.constraints.Pattern;
@@ -49,10 +49,10 @@ public class AccountDTO {
                         mr.getModule().getCode()+"_"+mr.getModuleRightCode(),
                         loadModuleRightDTO(mr, ModuleRightSource.ACCOUNT.name())
                 );
-            }else if(grantedAuthority instanceof Role){
-                Role role= (Role) grantedAuthority;
-                roles.add(new RoleDTO(role.getId(), role.getVersion(), role.getCode(), role.getDescription(),
-                        role.getOrder(), role.getValidFrom(), role.getValidTo(), role.getActive(), role.getLocal(), null));
+            }else if(grantedAuthority instanceof ApplicationRole){
+                ApplicationRole applicationRole = (ApplicationRole) grantedAuthority;
+                roles.add(new RoleDTO(applicationRole.getId(), applicationRole.getVersion(), applicationRole.getCode(), applicationRole.getDescription(),
+                        applicationRole.getOrder(), applicationRole.getValidFrom(), applicationRole.getValidTo(), applicationRole.getActive(), applicationRole.getLocal(), null));
             }
         }
     }

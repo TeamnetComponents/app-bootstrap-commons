@@ -1,23 +1,23 @@
 package ro.teamnet.bootstrap.service;
 
 
-import ro.teamnet.bootstrap.domain.Role;
+import ro.teamnet.bootstrap.domain.ApplicationRole;
 import ro.teamnet.bootstrap.web.rest.dto.RoleDTO;
 
 import java.util.Set;
 
-public interface RoleService extends AbstractService<Role,Long>{
+public interface RoleService extends AbstractService<ApplicationRole,Long>{
 
-    public Role getOne(Long id);
+    public ApplicationRole getOne(Long id);
 
-    public Role update(Role role);
+    public ApplicationRole update(ApplicationRole applicationRole);
 
-    public Role update(Role role, RoleDTO roleDTO);
+    public ApplicationRole update(ApplicationRole applicationRole, RoleDTO roleDTO);
 
     public Boolean updateRoleById(Long id, RoleDTO roleDTO);
 
-    public Role getOneById(Long id);
+    public ApplicationRole getOneById(Long id);
 
-    Set<Role> getAllWithModuleRights();
+    Set<ApplicationRole> getAllWithModuleRights();
 
 }
