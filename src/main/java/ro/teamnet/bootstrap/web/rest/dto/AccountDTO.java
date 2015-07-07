@@ -8,7 +8,10 @@ import ro.teamnet.bootstrap.domain.ModuleRight;
 import ro.teamnet.bootstrap.domain.util.ModuleRightSource;
 
 import javax.validation.constraints.Pattern;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class AccountDTO {
 
@@ -22,6 +25,7 @@ public class AccountDTO {
     private String email;
     private String langKey;
     private String gender;
+    private Boolean activated;
     private List<RoleDTO> roles = new ArrayList<>();
     private HashMap<String, ModuleRightDTO> moduleRights = new HashMap<>();
 
@@ -52,7 +56,6 @@ public class AccountDTO {
             }
         }
     }
-
 
     private ModuleRightDTO loadModuleRightDTO(ModuleRight mr, String source) {
         Module module = mr.getModule();
@@ -93,6 +96,14 @@ public class AccountDTO {
 
     public Collection<RoleDTO> getRoles() {
         return roles;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
     }
 
     public String getGender() {
