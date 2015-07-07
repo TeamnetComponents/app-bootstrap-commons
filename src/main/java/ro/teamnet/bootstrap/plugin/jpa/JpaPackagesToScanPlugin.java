@@ -8,6 +8,4 @@ public interface JpaPackagesToScanPlugin extends Plugin<JpaType> {
 
     public List<String> packagesToScan();
 
-    public String packageToScan();
-
 }
