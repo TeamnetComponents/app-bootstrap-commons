@@ -5,5 +5,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserAuthenticationPlugin extends Plugin<SecurityType> {
 
-    public Boolean authenticate(UserDetails userDetails);
+    public UserDetails authenticate(UserDetails userDetails);
 }
