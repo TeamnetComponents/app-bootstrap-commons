@@ -1,7 +1,6 @@
 package ro.teamnet.bootstrap.extend;
 
 import com.google.common.collect.Iterables;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ClassUtils;
@@ -42,8 +41,8 @@ public class SpecificationBuilder {
         return ClassUtils.isAssignable(Boolean.class, path.getJavaType());
     }
 
-    private static Boolean isDate(Path path){
-        return ClassUtils.isAssignable(DateTime.class,path.getJavaType());
+    private static Boolean isDate(Path path) {
+        return ClassUtils.isAssignable(DateTime.class, path.getJavaType());
     }
 
     public static <T> Specification<T> createSpecification(final Filters filters) {
@@ -61,9 +60,9 @@ public class SpecificationBuilder {
 
                     if (isBoolean(path)) {
                         predicates.add(getBooleanPredicate(predicateUtil, filter, path));
-                    }if(isDate(path)) {
-
-                    }else {
+                    } else if (isDate(path)) {
+                        //TODO filter date?
+                    } else {
                         predicates.add(getNonBooleanPredicate(predicateUtil, filter, path));
                     }
                 }
