@@ -6,5 +6,12 @@ import ro.teamnet.bootstrap.domain.util.ModuleRightTypeEnum;
 
 public interface UserAuthorizationPlugin extends Plugin<SecurityType> {
 
-    public Boolean grantAccessToResource(String resource, ModuleRightTypeEnum accessType);
+    /**
+     * Ensures that the authenticated user has the necessary rights to access a resource at a certain level.
+     *
+     * @param resource    the resource to be accessed
+     * @param accessLevel the level of access requested
+     * @return true if the user should be granted access, false otherwise.
+     */
+    Boolean grantAccessToResource(String resource, ModuleRightTypeEnum accessLevel);
 }
