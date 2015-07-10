@@ -10,5 +10,4 @@ public enum SecurityType {
     //using to register a plugin for user authorization service
     USER_AUTHORIZATION,
 
-    DEFAULT_USER_AUTHORIZATION,
 }
