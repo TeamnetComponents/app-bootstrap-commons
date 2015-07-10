@@ -1,15 +1,12 @@
 package ro.teamnet.bootstrap.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 import ro.teamnet.bootstrap.domain.util.ModuleRightTypeEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -34,6 +31,7 @@ public class ModuleRight implements Serializable, GrantedAuthority {
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "FK_MODULE", updatable = true, insertable = true)
+    @JsonBackReference
     private Module module;
 
     public Long getId() {

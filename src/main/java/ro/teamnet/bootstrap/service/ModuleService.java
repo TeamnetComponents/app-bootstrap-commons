@@ -2,11 +2,9 @@ package ro.teamnet.bootstrap.service;
 
 
 import ro.teamnet.bootstrap.domain.Module;
-import ro.teamnet.bootstrap.extend.AppPage;
-import ro.teamnet.bootstrap.extend.AppPageable;
 import ro.teamnet.bootstrap.web.rest.dto.ModuleDTO;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ModuleService extends AbstractService<Module,Long>{
 
@@ -14,6 +12,6 @@ public interface ModuleService extends AbstractService<Module,Long>{
 
     public boolean update(Long id, ModuleDTO moduleDTO);
 
-    public List<Module> getAllModulesWithModuleRights();
+    public Set<Module> getAllModulesWithModuleRights();
 
 }

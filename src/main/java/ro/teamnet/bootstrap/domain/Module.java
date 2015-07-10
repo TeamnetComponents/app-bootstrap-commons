@@ -1,16 +1,12 @@
 package ro.teamnet.bootstrap.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import ro.teamnet.bootstrap.domain.util.ModuleTypeEnum;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +38,7 @@ public class Module implements Serializable{
     private Short type;
 
     @OneToMany(mappedBy = "module", cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JsonManagedReference
     private Collection<ModuleRight> moduleRights = new ArrayList<>();
 
     @OneToMany(mappedBy = "parentModule")
