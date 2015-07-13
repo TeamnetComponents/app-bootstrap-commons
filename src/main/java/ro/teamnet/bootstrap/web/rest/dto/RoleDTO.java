@@ -1,9 +1,7 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 public class RoleDTO {
 
@@ -16,12 +14,12 @@ public class RoleDTO {
     private Date validTo;
     private Boolean active;
     private Short local;
-    private Collection<ModuleRightDTO> moduleRights = new ArrayList<>();
+    private Set<ModuleRightDTO> moduleRights = new HashSet<>();
 
     public RoleDTO() {
     }
 
-    public RoleDTO(Long id, Long version, String code, String description, Integer order, Date validFrom, Date validTo, Boolean active, Short local, Collection<ModuleRightDTO> moduleRights) {
+    public RoleDTO(Long id, Long version, String code, String description, Integer order, Date validFrom, Date validTo, Boolean active, Short local, Set<ModuleRightDTO> moduleRights) {
         this.id = id;
         this.version = version;
         this.code = code;
@@ -106,11 +104,11 @@ public class RoleDTO {
         this.local = local;
     }
 
-    public Collection<ModuleRightDTO> getModuleRights() {
+    public Set<ModuleRightDTO> getModuleRights() {
         return moduleRights;
     }
 
-    public void setModuleRights(Collection<ModuleRightDTO> moduleRights) {
+    public void setModuleRights(Set<ModuleRightDTO> moduleRights) {
         this.moduleRights = moduleRights;
     }
 
