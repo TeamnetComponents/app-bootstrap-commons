@@ -12,6 +12,8 @@ public interface ModuleService extends AbstractService<Module,Long>{
 
     public boolean update(Long id, ModuleDTO moduleDTO);
 
+//    public Module saveModule(ModuleDTO moduleDTO);
+
     public Set<Module> getAllModulesWithModuleRights();
 
 }

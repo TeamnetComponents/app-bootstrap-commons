@@ -69,6 +69,11 @@ public class ApplicationRole extends RoleBase {
         return code;
     }
 
+    @PrePersist
+    private void prePersist() {
+        setVersion(1L);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

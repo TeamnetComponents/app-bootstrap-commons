@@ -130,6 +130,11 @@ public class Module implements Serializable{
         return true;
     }
 
+    @PrePersist
+    private void prePersist() {
+       setVersion(1L);
+    }
+
     @Override
     public int hashCode() {
         int result = code.hashCode();
