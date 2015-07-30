@@ -37,7 +37,7 @@ public class Module implements Serializable{
     @Column(name = "TYPE")
     private Short type;
 
-    @OneToMany(mappedBy = "module", cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "module", cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE})
     @JsonManagedReference
     private Collection<ModuleRight> moduleRights = new ArrayList<>();
 
