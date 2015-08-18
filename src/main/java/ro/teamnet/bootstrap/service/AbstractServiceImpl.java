@@ -1,19 +1,16 @@
 package ro.teamnet.bootstrap.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-import ro.teamnet.bootstrap.extend.*;
+import ro.teamnet.bootstrap.extend.AppPage;
+import ro.teamnet.bootstrap.extend.AppPageable;
+import ro.teamnet.bootstrap.extend.AppRepository;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
-
+@Transactional(readOnly = true)
 public abstract class AbstractServiceImpl<T extends Serializable, ID extends Serializable> implements AbstractService<T, ID> {
 
 
