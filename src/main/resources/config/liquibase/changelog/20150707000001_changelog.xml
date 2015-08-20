@@ -27,7 +27,7 @@
     <property name="pk_t_account" value="null" dbms="!oracle,!postgresql"/>
 
 
-    <!-- Create ID_ACCOUNT table -->
+    <!-- Add discriminator to Role table -->
     <changeSet id="20150707" author="security-bootstrap" failOnError="true">
         <addColumn tableName="T_ROLE">
             <column name="ROLE_TYPE" type="varchar(50)" defaultValue="APPLICATION"/>
@@ -39,4 +39,9 @@
 
     </changeSet>
 
+    <!-- Change the types of columns valid_from and valid_to to date. -->
+    <changeSet id="20150820" author="security-bootstrap" failOnError="true">
+        <modifyDataType tableName="T_ROLE" columnName="valid_from" newDataType="date"/>
+        <modifyDataType tableName="T_ROLE" columnName="valid_to" newDataType="date"/>
+    </changeSet>
 </databaseChangeLog>
