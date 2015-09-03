@@ -79,4 +79,6 @@ public class AppRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepo
     public Specification<T> createSpecification(final AppPageable pageable) {
         return SpecificationBuilder.<T>createSpecification(pageable.getFilters());
     }
+
+
 }

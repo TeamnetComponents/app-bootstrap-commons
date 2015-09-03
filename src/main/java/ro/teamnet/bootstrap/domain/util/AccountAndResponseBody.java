@@ -2,6 +2,9 @@ package ro.teamnet.bootstrap.domain.util;
 
 import ro.teamnet.bootstrap.domain.Account;
 
+/**
+ * Clasa compozit de transport, unde se agrega informatii despre utilizator *
+ */
 public class AccountAndResponseBody {
 
     private String infoAboutAccount;

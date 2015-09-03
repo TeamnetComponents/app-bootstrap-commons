@@ -9,6 +9,11 @@ import org.springframework.data.repository.NoRepositoryBean;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Tip de baza pentru toate clasele din layer-ul de repository
+ * @param <T>
+ * @param <ID>
+ */
 @NoRepositoryBean
 public interface AppRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
     Page<T> findAll(Pageable pageable);

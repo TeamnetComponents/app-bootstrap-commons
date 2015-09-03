@@ -1,5 +1,8 @@
 package ro.teamnet.bootstrap.converter;
 
+/**
+ * Convertor de tip Integer
+ */
 public class IntegerConverter extends BaseConverter<java.lang.Integer> {
     @Override
     public ConverterType type() {

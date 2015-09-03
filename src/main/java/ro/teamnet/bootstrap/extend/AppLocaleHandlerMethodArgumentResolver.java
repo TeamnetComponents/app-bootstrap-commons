@@ -9,7 +9,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Map;
 
-
+/**
+ * Un filtru pentru a rezolva localizarea cand se ajunge intr-o metoda din Controller.
+ * Localizarea i10n se preia din client si este setat la nivel de application server
+ */
 public class AppLocaleHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String DEFAULT_PARAMETER = "locale";

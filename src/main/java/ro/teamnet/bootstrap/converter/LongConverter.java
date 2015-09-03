@@ -1,5 +1,8 @@
 package ro.teamnet.bootstrap.converter;
 
+/**
+ * Convertor de tip Long
+ */
 public class LongConverter extends BaseConverter<Long> {
     @Override
     public ConverterType type() {

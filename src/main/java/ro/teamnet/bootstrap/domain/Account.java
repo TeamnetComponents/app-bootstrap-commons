@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A user.
+ * Clasa incapsuleaza proprietatile unui utlizator al platformei.
  */
 @Entity
 @Table(name = "T_ACCOUNT")

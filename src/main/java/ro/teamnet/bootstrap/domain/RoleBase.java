@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Clasa reprezinta functionalitatile comune pentru toate strategiile de securitate.
+ * Este utlizatata atat de modulul de securitate prin ApplicationRole cat si prin Function din modulu de organizational Unit
+ */
 @Entity
 @Table(name = "T_ROLE")
 @DiscriminatorColumn(name = "ROLE_TYPE",discriminatorType = DiscriminatorType.STRING)

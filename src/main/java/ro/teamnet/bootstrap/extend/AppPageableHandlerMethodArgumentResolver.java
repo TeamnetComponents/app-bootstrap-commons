@@ -14,7 +14,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.lang.annotation.Annotation;
 
-
+/**
+ * Un handler pentru a rezolva obiectul de tip Pagina provenit de la un lcient web
+ */
 public class AppPageableHandlerMethodArgumentResolver extends PageableHandlerMethodArgumentResolver {
 
 

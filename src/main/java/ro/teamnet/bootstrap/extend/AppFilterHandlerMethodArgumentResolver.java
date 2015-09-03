@@ -10,7 +10,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.io.IOException;
 
-
+/**
+ * Un filtru pentru a rezolva argumentele unei metode din Controller
+ *
+ */
 public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String DEFAULT_PARAMETER = "filters";

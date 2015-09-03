@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+/**
+ * Plugin folosit pentru a scana dupa entitatile JPA
+ */
 public class DefaultPackagesToScanPlugin implements JpaPackagesToScanPlugin {
 
     private List<String> jpaPacks=new ArrayList<>();

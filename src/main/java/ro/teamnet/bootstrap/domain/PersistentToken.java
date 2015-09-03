@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 
 /**
- * A PersistentToken.
+ * Ut token persistent utilizat de modulul de securitate pentru a implementa functionalitatea de RememberMe.
  */
 @Entity
 @Table(name = "T_PERSISTENT_TOKEN")

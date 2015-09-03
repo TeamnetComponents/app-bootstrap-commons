@@ -4,6 +4,9 @@ import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
+/**
+ * Tiupri de convertoare
+ */
 public enum ConverterType {
     BOOLEAN(Boolean.class),
     LONG(Long.class),

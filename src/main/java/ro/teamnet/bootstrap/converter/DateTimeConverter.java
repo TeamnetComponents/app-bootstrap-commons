@@ -6,6 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Convertor de tip DateTime
+ */
 public class DateTimeConverter extends BaseConverter<DateTime> {
 
     public static final String DD_MM_YYYY = "dd-MM-yyyy";

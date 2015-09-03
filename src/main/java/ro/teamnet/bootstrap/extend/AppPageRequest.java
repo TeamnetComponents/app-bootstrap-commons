@@ -5,7 +5,10 @@ import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 
-
+/**
+ * O concreta de tip pagina venita de la client
+ *
+ */
 public class AppPageRequest extends PageRequest implements AppPageable, Serializable {
 
     private Filters filters = new Filters();

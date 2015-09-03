@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-
+/**
+ * Un multipart file
+ */
 public class AppMultipartFile implements MultipartFile {
     private final Part part;
 

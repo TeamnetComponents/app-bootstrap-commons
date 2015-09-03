@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.List;
 
-
+/**
+ * O concreta pentru pagina de date transmisa catre client
+ *  @param <T> Tipul de baza pentru care s-a facut paginarea
+ */
 public class AppPageImpl<T> extends PageImpl<T> implements AppPage<T>, Serializable {
 
     private Filters filters;

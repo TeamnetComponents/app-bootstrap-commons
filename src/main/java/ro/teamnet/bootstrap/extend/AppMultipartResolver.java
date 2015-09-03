@@ -7,7 +7,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Viorelt on 16.07.2014.
+ * Un rezolver de multipart request
  */
 public class AppMultipartResolver extends StandardServletMultipartResolver {
 

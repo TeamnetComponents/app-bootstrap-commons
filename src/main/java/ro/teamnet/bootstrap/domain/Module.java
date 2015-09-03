@@ -12,7 +12,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
+/**
+ * Clasa descrie un modul functional al viitoarei aplicatii, si este folosit de modulul de securitate
+ * pentru a lua decizii daca un utilizator are drept sau nu pe acest modul
+ */
 @Entity
 @Table(name = "T_MODULE")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
