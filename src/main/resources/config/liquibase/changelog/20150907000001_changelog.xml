@@ -17,7 +17,7 @@
 
 
     <!-- Create Upload Files Module -->
-    <changeSet id="201508141" author="app-bootstrap" failOnError="true">
+    <changeSet id="20150907000001" author="app-bootstrap" failOnError="true">
         <createTable tableName="T_FILE_MASTER">
             <column name="ID_FILE_MASTER" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

@@ -27,25 +27,24 @@
     <property name="pk_t_account" value="null" dbms="!oracle,!postgresql"/>
 
     <!-- Create ID_ACCOUNT table -->
-    <changeSet id="20150912000001" author="security-bootstrap" failOnError="true">
+    <changeSet id="20150906000001" author="security-bootstrap" failOnError="true">
 
 
         <!-- Insert DictionaryElement -->
         <insert tableName="T_MODULE">
             <column name="ID_MODULE" valueComputed="${pk_t_module}"/>
             <column name="VERSION" value="1"/>
-            <column name="CODE" value="DownloadFile"/>
+            <column name="CODE" value="UploadFile"/>
             <column name="TYPE" value="1"/>
-            <column name="DESCRIPTION" value="Download files"/>
+            <column name="DESCRIPTION" value="Upload files"/>
         </insert>
-
 
 
         <insert tableName="T_MODULE_RIGHT">
             <column name="ID_MODULE_RIGHT" valueComputed="${pk_t_module_right}"/>
-            <column name="MODULE_RIGHT" value="1"/>
+            <column name="MODULE_RIGHT" value="4"/>
             <column name="VERSION" value="1"/>
-            <column name="FK_MODULE" valueComputed="(SELECT ID_MODULE from T_MODULE where CODE = 'DownloadFile')"/>
+            <column name="FK_MODULE" valueComputed="(SELECT ID_MODULE from T_MODULE where CODE = 'UploadFile')"/>
         </insert>
         <!-- End Insert DictionaryElement -->
 
@@ -58,16 +57,16 @@
         <insert tableName="T_ROLE_MODULE_RIGHTS">
             <column name="fk_role" valueComputed="(SELECT ID_ROLE from T_ROLE where CODE = 'ROLE_ADMIN' )"/>
             <column name="fk_module_right"
-                    valueComputed="(SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 1
-                                AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'DownloadFile'))"/>
+                    valueComputed="(SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 4
+                                AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'UploadFile'))"/>
         </insert>
 
 
         <insert tableName="T_ACCOUNT_MODULE_RIGHTS">
             <column name="fk_account" valueComputed="(SELECT ID_ACCOUNT from T_ACCOUNT where login = 'admin' )"/>
             <column name="fk_module_right"
-                    valueComputed="(SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 1
-                                    AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'DownloadFile'))"/>
+                    valueComputed="(SELECT ID_MODULE_RIGHT from T_MODULE_RIGHT where  MODULE_RIGHT = 4
+                                    AND FK_MODULE = (SELECT ID_MODULE from T_MODULE where CODE = 'UploadFile'))"/>
         </insert>
 
     </changeSet>
