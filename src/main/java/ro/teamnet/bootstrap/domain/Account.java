@@ -33,7 +33,7 @@ public class Account extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     @Size(min = 0, max = 100)
-    @Column(name="password", length = 100)
+    @Column(name="account_password", length = 100)
     private String password;
 
     @Size(min = 0, max = 50)

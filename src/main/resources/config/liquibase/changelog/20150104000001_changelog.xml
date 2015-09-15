@@ -36,7 +36,7 @@
             <column name="LOGIN" type="varchar(50)">
                 <constraints unique="true"/>
             </column>
-            <column name="PASSWORD" type="varchar(100)"/>
+            <column name="ACCOUNT_PASSWORD" type="varchar(100)"/>
             <column name="FIRST_NAME" type="varchar(50)"/>
             <column name="LAST_NAME" type="varchar(50)"/>
             <column name="EMAIL" type="varchar(100)">
@@ -255,7 +255,7 @@
             <column name="LOGIN" type="varchar(50)">
                 <constraints unique="true"/>
             </column>
-            <column name="PASSWORD" type="varchar(100)"/>
+            <column name="ACCOUNT_PASSWORD" type="varchar(100)"/>
             <column name="FIRST_NAME" type="varchar(50)"/>
             <column name="LAST_NAME" type="varchar(50)"/>
             <column name="EMAIL" type="varchar(100)">
@@ -307,7 +307,7 @@
                       oldColumnName="EMPOYEE_ID"
                       tableName="T_EMPLOYEE"/>
     </changeSet>
-    
+
     <changeSet id="20150306#2" author="security-bootstrap" failOnError="true">
         <addColumn tableName="T_EMPLOYEE">
             <column name="PHONE_NUMBER" type="varchar(50)"/>
@@ -329,7 +329,7 @@
         <insert tableName="T_ACCOUNT">
             <column name="id_account" valueComputed="${pk_t_account}"/>
             <column name="login" value="system"/>
-            <column name="password" value="$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG"/>
+            <column name="account_password" value="$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG"/>
             <column name="first_name" value="System"/>
             <column name="last_name" value="System"/>
             <column name="email" value="system@email.com"/>
@@ -340,7 +340,7 @@
         <insert tableName="T_ACCOUNT">
             <column name="id_account" valueComputed="${pk_t_account}"/>
             <column name="login" value="admin"/>
-            <column name="password" value="$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC"/>
+            <column name="account_password" value="$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC"/>
             <column name="first_name" value="Admin"/>
             <column name="last_name" value="Admin"/>
             <column name="email" value="admin@email.com"/>
@@ -351,7 +351,7 @@
         <insert tableName="T_ACCOUNT">
             <column name="id_account" valueComputed="${pk_t_account}"/>
             <column name="login" value="user"/>
-            <column name="password" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
+            <column name="account_password" value="$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K"/>
             <column name="first_name" value="User"/>
             <column name="last_name" value="User"/>
             <column name="email" value="user@email.com"/>
@@ -368,8 +368,8 @@
             <column name="version" value="1"/>
             <column name="code" value="ROLE_SYSTEM"/>
             <column name="description" value="System Role"/>
-            <column name="valid_from" value="2012-12-12T12:03:42.568"/>
-            <column name="valid_to" value="2050-12-12T12:03:42.568"/>
+            <column name="valid_from" valueDate="2012-12-12T12:03:42.568"/>
+            <column name="valid_to" valueDate="2050-12-12T12:03:42.568"/>
             <column name="is_active" value="${activated}"/>
         </insert>
         <insert tableName="T_ROLE">
@@ -377,8 +377,8 @@
             <column name="version" value="1"/>
             <column name="code" value="ROLE_ADMIN"/>
             <column name="description" value="Admin role"/>
-            <column name="valid_from" value="2012-12-12T12:03:42.568"/>
-            <column name="valid_to" value="2050-12-12T12:03:42.568"/>
+            <column name="valid_from" valueDate="2012-12-12T12:03:42.568"/>
+            <column name="valid_to" valueDate="2050-12-12T12:03:42.568"/>
             <column name="is_active" value="${activated}"/>
         </insert>
         <insert tableName="T_ROLE">
@@ -386,8 +386,8 @@
             <column name="version" value="1"/>
             <column name="code" value="ROLE_USER"/>
             <column name="description" value="user role"/>
-            <column name="valid_from" value="2012-12-12T12:03:42.568"/>
-            <column name="valid_to" value="2050-12-12T12:03:42.568"/>
+            <column name="valid_from" valueDate="2012-12-12T12:03:42.568"/>
+            <column name="valid_to" valueDate="2050-12-12T12:03:42.568"/>
             <column name="is_active" value="${activated}"/>
         </insert>
     </changeSet>
