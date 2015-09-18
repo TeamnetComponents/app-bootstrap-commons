@@ -2,6 +2,7 @@ package ro.teamnet.bootstrap.extend;
 
 import com.google.common.collect.Iterables;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ClassUtils;
 import ro.teamnet.bootstrap.exception.InvalidNumberOfFiltersException;
@@ -9,7 +10,10 @@ import ro.teamnet.bootstrap.exception.InvalidNumberOfFiltersException;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
+import static ro.teamnet.bootstrap.extend.Filter.FilterType.BETWEEN;
 
 /**
  * Utility class for building specifications.
@@ -42,7 +46,9 @@ public class SpecificationBuilder {
     }
 
     private static Boolean isDate(Path path) {
-        return ClassUtils.isAssignable(DateTime.class, path.getJavaType());
+        return ClassUtils.isAssignable(LocalDate.class, path.getJavaType())
+                || ClassUtils.isAssignable(DateTime.class, path.getJavaType())
+                || ClassUtils.isAssignable(Date.class, path.getJavaType());
     }
 
     public static <T> Specification<T> createSpecification(final Filters filters) {
@@ -61,7 +67,10 @@ public class SpecificationBuilder {
                     if (isBoolean(path)) {
                         predicates.add(getBooleanPredicate(predicateUtil, filter, path));
                     } else if (isDate(path)) {
-                        //TODO filter date?
+                        Predicate datePredicate = getDatePredicate(predicateUtil, filter, path);
+                        if (datePredicate != null) {
+                            predicates.add(datePredicate);
+                        }
                     } else {
                         predicates.add(getNonBooleanPredicate(predicateUtil, filter, path));
                     }
@@ -87,6 +96,14 @@ public class SpecificationBuilder {
                     return filter.getNegation() ? booleanEqualPredicate.not() : booleanEqualPredicate;
                 }
                 return predicateUtil.getFalsePredicate();
+            }
+
+            private Predicate getDatePredicate(PredicateUtil predicateUtil, Filter filter, Path path) {
+                Predicate datePredicate = null;
+                if (filter.getType().equals(BETWEEN)) {
+                    datePredicate = predicateUtil.getBetweenDatesPredicate(path, filter.getValues());
+                }
+                return datePredicate;
             }
 
             /**
@@ -256,7 +273,7 @@ public class SpecificationBuilder {
          * @return predicate
          */
         protected Predicate getBooleanEqualPredicate(Path path, String value) {
-            return Boolean.getBoolean(value) ? criteriaBuilder.isTrue(path) : criteriaBuilder.isFalse(path);
+            return Boolean.valueOf(value) ? criteriaBuilder.isTrue(path) : criteriaBuilder.isFalse(path);
         }
 
         /**
@@ -353,6 +370,47 @@ public class SpecificationBuilder {
          */
         protected Predicate getFalsePredicate() {
             return criteriaBuilder.isTrue(criteriaBuilder.literal(false));
+        }
+
+        /**
+         * Creates a predicate testing whether a date-type path value is between the dates specified in values argument.
+         * If one of the interval margins is null, a greater than/ lesser than predicate is created using the non-null margin.
+         *
+         * @param path   the path to test
+         * @param values the date values provided as strings
+         * @return a between predicate for date values
+         */
+        public Predicate getBetweenDatesPredicate(Path path, List<String> values) {
+            if (values == null || values.size() != 2) {
+                return null;
+            }
+            String startDateString = values.get(0);
+            String endDateString = values.get(1);
+            if (startDateString == null && endDateString == null) {
+                return null;
+            }
+            if (endDateString == null) {
+                return criteriaBuilder.greaterThanOrEqualTo(path, parseDate(startDateString, path.getJavaType()));
+            }
+            if (startDateString == null) {
+                return criteriaBuilder.lessThanOrEqualTo(path, parseDate(endDateString, path.getJavaType()));
+            }
+            return criteriaBuilder.between(path, parseDate(startDateString, path.getJavaType()),
+                    parseDate(endDateString, path.getJavaType()));
+        }
+
+        private Comparable parseDate(String dateString, Class type){
+            DateTime dateTime = DateTime.parse(dateString);
+            if (ClassUtils.isAssignable(DateTime.class, type)){
+                return dateTime;
+            }
+            if (ClassUtils.isAssignable(LocalDate.class, type)){
+                return dateTime.toLocalDate();
+            }
+            if (ClassUtils.isAssignable(Date.class, type)){
+                return dateTime.toDate();
+            }
+            return dateString;
         }
     }
 

@@ -1,6 +1,9 @@
 package ro.teamnet.bootstrap.extend;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,7 +15,6 @@ import java.io.IOException;
 
 /**
  * Un filtru pentru a rezolva argumentele unei metode din Controller
- *
  */
 public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -36,7 +38,9 @@ public class AppFilterHandlerMethodArgumentResolver implements HandlerMethodArgu
             return null;
 
         Filters filters = new Filters();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper()
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         for (String filterString : filterStrings) {
             Filter filter = null;
             try {
