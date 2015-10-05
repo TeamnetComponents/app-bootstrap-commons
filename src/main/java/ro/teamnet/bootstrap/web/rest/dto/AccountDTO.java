@@ -1,6 +1,7 @@
 package ro.teamnet.bootstrap.web.rest.dto;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ro.teamnet.bootstrap.domain.Account;
 import ro.teamnet.bootstrap.domain.ApplicationRole;
 import ro.teamnet.bootstrap.domain.Module;
@@ -29,7 +30,11 @@ public class AccountDTO {
     private List<RoleDTO> roles = new ArrayList<>();
     private HashMap<String, ModuleRightDTO> moduleRights = new HashMap<>();
 
-    public AccountDTO() {
+    public AccountDTO(UserDetails userDetails, Collection<GrantedAuthority> authorities) {
+        this.login = userDetails.getUsername();
+        this.password = userDetails.getPassword();
+        this.activated = userDetails.isEnabled();
+        loadModuleRights(authorities);
     }
 
     public AccountDTO(Account account,Collection<GrantedAuthority> moduleRightSet){
@@ -42,7 +47,14 @@ public class AccountDTO {
         this.langKey = account.getLangKey();
         this.gender = account.getGender();
 
-        for(GrantedAuthority grantedAuthority: moduleRightSet) {
+        loadModuleRights(moduleRightSet);
+    }
+
+    private void loadModuleRights(Collection<GrantedAuthority> authorities) {
+        if(authorities == null) {
+            return;
+        }
+        for(GrantedAuthority grantedAuthority: authorities) {
             if(grantedAuthority instanceof ModuleRight && ((ModuleRight)grantedAuthority).getModule() != null){
                 ModuleRight mr=(ModuleRight)grantedAuthority;
                 moduleRights.put(
