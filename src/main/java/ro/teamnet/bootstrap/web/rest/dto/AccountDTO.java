@@ -30,6 +30,11 @@ public class AccountDTO {
     private List<RoleDTO> roles = new ArrayList<>();
     private HashMap<String, ModuleRightDTO> moduleRights = new HashMap<>();
 
+    /**
+     * Required for JSON conversion.
+     */
+    public AccountDTO(){}
+
     public AccountDTO(UserDetails userDetails, Collection<GrantedAuthority> authorities) {
         this.login = userDetails.getUsername();
         this.password = userDetails.getPassword();
