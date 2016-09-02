@@ -4,12 +4,12 @@
     <parent>
         <groupId>ro.teamnet.bootstrap</groupId>
         <artifactId>bootstrap-dependencies</artifactId>
-        <version>0.2.13</version>
+        <version>0.2.14-SNAPSHOT</version>
         <relativePath />
     </parent>
     <name>app-bootstrap-commons</name>
     <artifactId>app-bootstrap-commons</artifactId>
-    <version>0.2.13</version>
+    <version>0.2.14-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>
@@ -27,7 +27,7 @@
     <scm>
         <url>http://git-components.teamnet.ro/summary/components%2Fjava%2Fapp-bootstrap-commons.git</url>
         <connection>scm:git:http://component-publisher@git-components.teamnet.ro/r/components/java/app-bootstrap-commons.git</connection>
-        <tag>v0.2.13</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
