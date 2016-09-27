@@ -4,12 +4,12 @@
     <parent>
         <groupId>ro.teamnet.bootstrap</groupId>
         <artifactId>bootstrap-dependencies</artifactId>
-        <version>0.2.15</version>
+        <version>0.2.16-SNAPSHOT</version>
         <relativePath />
     </parent>
     <name>app-bootstrap-commons</name>
     <artifactId>app-bootstrap-commons</artifactId>
-    <version>0.2.15</version>
+    <version>0.2.16-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>
